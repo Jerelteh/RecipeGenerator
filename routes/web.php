@@ -18,5 +18,9 @@ require __DIR__ . '/auth.php';
 Route::get('/recipeGenerator', function () {
     return view('recipeGenerator');
 })->name('recipe.generator');
+
 Route::post('/submit-input', [openaiController::class, 'submitInput'])->name('submit.input');
+Route::post('/save-recipe', [openaiController::class, 'saveRecipe'])->name('save.recipe');
+Route::get('/recipe-list', [openaiController::class, 'listRecipes'])->name('recipe.list');
+Route::delete('/delete-recipe/{id}', [openaiController::class, 'deleteRecipe'])->name('delete.recipe');
 // Recipe Generation __END__

@@ -11,12 +11,34 @@
 
 <body>
     <div>
-        <h1>{{ $recipeTitle }}</h1>
         {{-- START - Generated Recipe Output --}}
+        <h1>{{ $recipeTitle }}</h1>
         <div class="">
             {!! nl2br($recipeBody) !!}
         </div>
         {{-- START - Generated Recipe Output --}}
+
+        <div>
+            {{-- START - save recipe --}}
+            <form action="{{ route('save.recipe') }}" method="POST">
+                @csrf
+                <input type="hidden" name="title" value="{{ $recipeTitle }}">
+                <input type="hidden" name="content" value="{{ $recipeBody }}">
+                <button type="submit">Save Recipe</button>
+            </form>
+            {{-- END - save recipe --}}
+
+            {{-- START - Regenerate recipe --}}
+            <form action="{{ route('submit.input') }}" method="POST">
+                @csrf
+                <input type="hidden" name="question1" value="{{ session('question1') }}">
+                <input type="hidden" name="question2" value="{{ session('question2') }}">
+                <input type="hidden" name="question3" value="{{ session('question3') }}">
+                <button type="submit">Regenerate Recipe</button>
+            </form>
+            {{-- END - Regenerate recipe --}}
+        </div>
+
     </div>
 
 </body>

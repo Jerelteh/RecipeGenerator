@@ -26,7 +26,7 @@
                 <label for="question3">3. How much time do you have for cooking (in mins)?</label>
                 <input type="text" class="form-control" id="question3" name="question3">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Generate Recipe</button>
         </form>
     </div>
 </body>
