@@ -16,8 +16,8 @@
     <ul>
         @foreach ($recipes as $recipe)
             <li>
-                <strong>{{ $recipe->title }}</strong>
-                <form action="{{ route('delete.recipe', $recipe->id) }}" method="POST" style="display:inline;">
+                <a href="{{ route('view.recipe', ['id' => $recipe->id]) }}">{{ $recipe->title }}</a>
+                <form action="{{ route('delete.recipe', ['id' => $recipe->id]) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit">Delete</button>

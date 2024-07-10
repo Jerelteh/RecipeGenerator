@@ -79,4 +79,9 @@ class openaiController extends Controller
 
         return redirect()->route('recipe.list')->with('status', 'Recipe deleted successfully!');
     }
+    public function viewRecipe($recipeID)
+    {
+        $recipe = Recipe::findOrFail($recipeID);
+        return view('viewRecipe', ['recipeBody' => $recipe->content, 'recipeTitle' => $recipe->title]);
+    }
 }

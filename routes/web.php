@@ -22,5 +22,6 @@ Route::get('/recipeGenerator', function () {
 Route::post('/submit-input', [openaiController::class, 'submitInput'])->name('submit.input');
 Route::post('/save-recipe', [openaiController::class, 'saveRecipe'])->name('save.recipe');
 Route::get('/recipe-list', [openaiController::class, 'listRecipes'])->name('recipe.list');
+Route::get('/recipe/{id}', [openaiController::class, 'viewRecipe'])->name('view.recipe');
 Route::delete('/delete-recipe/{id}', [openaiController::class, 'deleteRecipe'])->name('delete.recipe');
 // Recipe Generation __END__
