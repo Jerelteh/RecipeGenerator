@@ -2,6 +2,7 @@
 
 namespace App\AI;
 
+use App\Models\Recipe;
 use Illuminate\Support\Facades\Http;
 
 class Chat
