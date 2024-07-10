@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 
 class openaiController extends Controller
 {
-    public function listRecipes()
-    {
-        $recipes = Recipe::all();
-        return view('recipeList', ['recipes' => $recipes]);
-    }
     public function submitInput(Request $request)
     {
         $data = $request->validate([
@@ -45,7 +40,7 @@ class openaiController extends Controller
             'question3' => $data['question3'],
         ]);
 
-        return view('generatedRecipe', ['recipeBody' => $recipeBody, 'recipeTitle' => $recipeTitle]);
+        return view('generatedRecipe', ['recipeBody' => $recipeBody, 'recipeTitle' => $recipeTitle, 'recipeID' => null]);
     }
     private function extractRecipeTitle($response) // retrieves recipeTitle by getting first output line
     {
@@ -83,5 +78,10 @@ class openaiController extends Controller
     {
         $recipe = Recipe::findOrFail($recipeID);
         return view('viewRecipe', ['recipeBody' => $recipe->content, 'recipeTitle' => $recipe->title]);
+    }
+    public function listRecipes()
+    {
+        $recipes = Recipe::all();
+        return view('recipeList', ['recipes' => $recipes]);
     }
 }

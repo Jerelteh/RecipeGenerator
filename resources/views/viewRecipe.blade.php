@@ -15,6 +15,7 @@
         {!! nl2br($recipeBody) !!}
     </div>
     {{-- END - recipe details --}}
+    <a href="{{ route('edit.recipe', ['id' => $recipeID]) }}">Edit Recipe</a>
     <a href="{{ route('recipe.list') }}">Back to Recipe List</a>
 </body>
 
