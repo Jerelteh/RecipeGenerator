@@ -33,4 +33,13 @@ class HomeController extends Controller
         $recipes = Recipe::all();
         return view('homepage', ['recipes' => $recipes]);
     }
+    public function viewRecipe($recipeID)
+    {
+        $recipe = Recipe::findOrFail($recipeID);
+        return view('viewRecipe', [
+            'recipeTitle' => $recipe->title,
+            'recipeBody' => $recipe->content,
+            'recipeID' => $recipe->id
+        ]);
+    }
 }

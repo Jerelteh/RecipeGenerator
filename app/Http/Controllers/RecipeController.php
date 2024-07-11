@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Recipe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RecipeController extends Controller
 {
@@ -17,6 +18,7 @@ class RecipeController extends Controller
         $recipe = new Recipe();
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
+        $recipe->user_id = Auth::id(); // associate with logged-in user
         $recipe->save();
 
         return redirect()->route('view.recipe', ['id' => $recipe->id])->with('status', 'Recipe saved successfully!');
@@ -39,7 +41,7 @@ class RecipeController extends Controller
     }
     public function listRecipes()
     {
-        $recipes = Recipe::all();
+        $recipes = Recipe::where('user_id', Auth::id())->get(); // Fetch recipes for the logged-in user
         return view('recipeList', ['recipes' => $recipes]);
     }
     public function editRecipe($recipeID) // for finding existing recipe to edit
