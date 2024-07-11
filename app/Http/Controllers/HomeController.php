@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Recipe;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,5 +25,21 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    //////////////////////////////////////////////////////////////////
+    public function homepage()
+    {
+        $recipes = Recipe::all();
+        return view('homepage', ['recipes' => $recipes]);
+    }
+    public function viewRecipe($recipeID)
+    {
+        $recipe = Recipe::findOrFail($recipeID);
+        return view('viewRecipe', [
+            'recipeTitle' => $recipe->title,
+            'recipeBody' => $recipe->content,
+            'recipeID' => $recipe->id
+        ]);
     }
 }

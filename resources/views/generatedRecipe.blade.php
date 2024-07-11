@@ -37,6 +37,15 @@
                 <button type="submit">Regenerate Recipe</button>
             </form>
             {{-- END - Regenerate recipe --}}
+
+            {{-- START - To edit recipe  --}}
+            <form action="{{ route('edit.temp.recipe') }}" method="POST">
+                @csrf
+                <input type="hidden" name="title" value="{{ $recipeTitle }}">
+                <input type="hidden" name="content" value="{{ $recipeBody }}">
+                <button type="submit">Edit Recipe</button>
+            </form>
+            {{-- END - To edit recipe --}}
         </div>
 
     </div>

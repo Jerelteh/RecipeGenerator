@@ -4,19 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe List</title>
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lemon Homepage</title>
 </head>
 
 <body>
-    <h1>Recipe List</h1>
-    @if (session('status'))
-        <div>{{ session('status') }}</div>
-    @endif
+    <h1>Welcome to Lemon</h1>
 
-    @if ($recipes->isEmpty())
-        <p>No Saved Recipes</p>
-    @else
+    <h2>Food Recipes</h2>
+    <a href="{{ route('recipe.generator') }}">
+        <button>Generate New Recipe</button>
+    </a>
+    <div>
+        {{-- @if (session('status'))
+            <p>{{ session('status') }}</p>
+        @endif --}}
         <ul>
             @foreach ($recipes as $recipe)
                 <li>
@@ -30,7 +32,7 @@
                 </li>
             @endforeach
         </ul>
-    @endif
+    </div>
 
 </body>
 
