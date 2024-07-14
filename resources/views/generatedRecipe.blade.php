@@ -34,6 +34,8 @@
                 <input type="hidden" name="question1" value="{{ session('question1') }}">
                 <input type="hidden" name="question2" value="{{ session('question2') }}">
                 <input type="hidden" name="question3" value="{{ session('question3') }}">
+                <input type="hidden" name="question4" value="{{ session('question4') }}">
+                <input type="hidden" name="question5" value="{{ session('question5') }}">
                 <button type="submit">Regenerate Recipe</button>
             </form>
             {{-- END - Regenerate recipe --}}

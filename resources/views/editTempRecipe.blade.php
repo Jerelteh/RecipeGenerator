@@ -11,7 +11,7 @@
 <body>
     <h1>Edit Recipe</h1>
     <div>
-        <form action="{{ route('submit.input') }}" method="POST">
+        <form action="{{ route('update.temp.recipe') }}" method="POST">
             @csrf
             <div>
                 <label for="title">Recipe Title:</label>
@@ -24,7 +24,8 @@
             <button type="submit">Update Recipe</button>
         </form>
     </div>
-    <a href="{{ route('homepage') }}">Cancel</a>
+    <button onclick="history.back()">Cancel</button>
+
 </body>
 
 </html>

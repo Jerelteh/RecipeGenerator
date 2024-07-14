@@ -11,17 +11,25 @@ class openaiController extends Controller
     public function submitInput(Request $request)
     {
         $data = $request->validate([
-            'question1' => 'string',
-            'question2' => 'string',
-            'question3' => 'string',
+            'question1' => 'nullable|string',
+            'question2' => 'nullable|string',
+            'question3' => 'nullable|string',
+            'question4' => 'nullable|string',
+            'question5' => 'required|string',
         ]);
 
         $input = new Chat();
-        $message = "Dish: {$data['question1']}\nIngredients: {$data['question2']}\nPreferred Time(mins): {$data['question3']}";
+        $message = "Ingredients on-hand: {$data['question1']}\n
+                    Available Food Preparation Appliances: {$data['question2']}\n
+                    Available Kitchen Appliances for Cooking: {$data['question3']}\n
+                    Preferred Time(mins): {$data['question4']}\n
+                    Cooking Skill Level: {$data['question5']}";
         $response = $input
             ->systemMessage('You are a text to recipe generator. You will generate the following things accordingly: 
                             detailed but short steps, ingredients used, estimated completion time, estimated calorie. 
-                            Recipe should cater to beginner to intermediate level. 
+                            Recipe should cater to novice cooking skill level by default unless specified.
+                            If preferred time is not provided by user, an estimated time must be provided.
+                            If Cooking skill is advanced, add extra ingredients and steps, if PRO cooking skill, add even more on top of advanced.
                             Data to be listed in sequence: simple recipe Title, ingredients, estimated time required, steps, estimated calorie.
                             PS: 
                             1. for the recipe title, just output the title without actually writing "recipe title: "
@@ -38,6 +46,8 @@ class openaiController extends Controller
             'question1' => $data['question1'],
             'question2' => $data['question2'],
             'question3' => $data['question3'],
+            'question4' => $data['question4'],
+            'question5' => $data['question5'],
         ]);
 
         return view('generatedRecipe', ['recipeBody' => $recipeBody, 'recipeTitle' => $recipeTitle, 'recipeID' => null]);
