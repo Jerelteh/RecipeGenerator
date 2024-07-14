@@ -36,7 +36,7 @@ class HomeController extends Controller
     public function viewRecipe($recipeID)
     {
         $recipe = Recipe::findOrFail($recipeID);
-        return view('viewRecipe', [
+        return view('viewRecipeFromHome', [
             'recipeTitle' => $recipe->title,
             'recipeBody' => $recipe->content,
             'recipeID' => $recipe->id

@@ -9,14 +9,11 @@
 </head>
 
 <body>
-    {{-- START - recipe details --}}
     <h1>{{ $recipeTitle }}</h1>
     <div class="">
-        {!! nl2br($recipeBody) !!}
+        {!! nl2br(e($recipeBody)) !!}
     </div>
-    {{-- END - recipe details --}}
-    <a href="{{ route('edit.recipe', ['id' => $recipeID]) }}">Edit Recipe</a>
-    <a href="{{ route('recipe.list') }}">Back</a>
+    <a href="{{ route('homepage') }}">Back</a>
 </body>
 
 </html>
