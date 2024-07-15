@@ -52,6 +52,16 @@ class openaiController extends Controller
 
         return view('generatedRecipe', ['recipeBody' => $recipeBody, 'recipeTitle' => $recipeTitle, 'recipeID' => null]);
     }
+    public function showRecipeGenerator(Request $request) // returns recipeGenerator view and imbue session with values
+    {
+        return view('recipeGenerator', [
+            'question1' => session('question1', ''),
+            'question2' => session('question2', ''),
+            'question3' => session('question3', ''),
+            'question4' => session('question4', ''),
+            'question5' => session('question5', ''),
+        ]);
+    }
     private function extractRecipeTitle($response) // retrieves recipeTitle by getting first output line
     {
         $line = explode("\n", $response); // assumes first line is recipeTitle

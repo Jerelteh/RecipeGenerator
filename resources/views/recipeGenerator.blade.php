@@ -32,39 +32,50 @@
             <div class="form-group">
                 <label for="question1">1. What ingredients do you have on hand?</label>
                 <div id="question1">
-                    <input type="text" class="form-control" id="question1" name="question1"><br>
+                    <input type="text" class="form-control" id="question1" name="question1"
+                        value="{{ $question1 }}"><br>
                 </div>
             </div>
             <div class="form-group">
                 <label for="question2">2. Food Preparation Appliances:</label>
                 <div id="question2">
                     @foreach (['Blender', 'Food Processor', 'Juicer', 'Coffee Grinder', 'Mortar and Pestle'] as $appliance)
-                        <div class="selectable" data-value="{{ $appliance }}">{{ $appliance }}</div>
+                        <div class="selectable {{ in_array($appliance, explode(', ', $question2)) ? 'selected' : '' }}"
+                            data-value="{{ $appliance }}">
+                            {{ $appliance }}
+                        </div>
                     @endforeach
                 </div>
-                <input type="hidden" id="question2_input" name="question2"><br>
+                <input type="hidden" id="question2_input" name="question2" value="{{ $question2 }}"><br>
             </div>
             <div class="form-group">
                 <label for="question3">3. Kitchen Appliances for Cooking:</label>
                 <div id="question3">
                     @foreach (['Stove Top', 'Oven', 'Microwave', 'Grill', 'Air Fryer', 'Food Steamer', 'Pressure Cooker', 'Slow Cooker', 'Rice Cooker'] as $appliance)
-                        <div class="selectable" data-value="{{ $appliance }}">{{ $appliance }}</div>
+                        <div class="selectable {{ in_array($appliance, explode(', ', $question3)) ? 'selected' : '' }}"
+                            data-value="{{ $appliance }}">
+                            {{ $appliance }}
+                        </div>
                     @endforeach
                 </div>
                 <input type="hidden" id="question3_input" name="question3"><br>
             </div>
             <div class="form-group">
                 <label for="question4">4. How much time do you have for cooking (in mins)?</label>
-                <input type="number" class="form-control" id="question4" name="question4"><br>
+                <input type="number" class="form-control" id="question4" name="question4"
+                    value="{{ $question4 }}"><br>
             </div>
             <div class="form-group">
                 <label for="question5">5. Level of Cooking Skill:</label>
                 <div id="question5">
                     @foreach (['Beginner', 'Novice', 'Intermediate', 'Advanced', 'PRO'] as $level)
-                        <div class="selectable" data-value="{{ $level }}">{{ $level }}</div>
+                        <div class="selectable {{ $level === $question5 ? 'selected' : '' }}"
+                            data-value="{{ $level }}">
+                            {{ $level }}
+                        </div>
                     @endforeach
                 </div>
-                <input type="hidden" id="question5_input" name="question5"><br>
+                <input type="hidden" id="question5_input" name="question5" value="{{ $question5 }}"><br>
             </div>
             <button type="submit" class="btn btn-primary">Generate Recipe</button>
         </form>

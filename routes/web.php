@@ -21,9 +21,7 @@ Route::get('/recipe-from-home/{id}', [HomeController::class, 'viewRecipe'])->nam
 require __DIR__ . '/auth.php';
 
 // Recipe Generation __START__
-Route::get('/recipeGenerator', function () {
-    return view('recipeGenerator');
-})->name('recipe.generator');
+Route::get('/recipeGenerator', [openaiController::class, 'showRecipeGenerator'])->name('recipe.generator');
 
 Route::post('/submit-input', [openaiController::class, 'submitInput'])->name('submit.input');
 // Recipe Generation __END__

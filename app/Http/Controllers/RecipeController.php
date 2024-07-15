@@ -21,7 +21,14 @@ class RecipeController extends Controller
         $recipe->user_id = Auth::id(); // associate with logged-in user
         $recipe->save();
 
+        // clear session values after saving recipe
+        $this->clearSessionValues();
+
         return redirect()->route('view.recipe', ['id' => $recipe->id])->with('status', 'Recipe saved successfully!');
+    }
+    private function clearSessionValues() // clears session values
+    {
+        session()->forget(['question1', 'question2', 'question3', 'question4', 'question5']);
     }
     public function deleteRecipe(int $recipeID)
     {
