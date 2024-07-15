@@ -21,7 +21,14 @@ class RecipeController extends Controller
         $recipe->user_id = Auth::id(); // associate with logged-in user
         $recipe->save();
 
+        // clear session values after saving recipe
+        $this->clearSessionValues();
+
         return redirect()->route('view.recipe', ['id' => $recipe->id])->with('status', 'Recipe saved successfully!');
+    }
+    private function clearSessionValues() // clears session values
+    {
+        session()->forget(['question1', 'question2', 'question3', 'question4', 'question5']);
     }
     public function deleteRecipe(int $recipeID)
     {
@@ -44,7 +51,7 @@ class RecipeController extends Controller
         $recipes = Recipe::where('user_id', Auth::id())->get(); // Fetch recipes for the logged-in user
         return view('recipeList', ['recipes' => $recipes]);
     }
-    public function editRecipe($recipeID) // for finding existing recipe to edit
+    public function editRecipe($recipeID) // directing to editRecipe page
     {
         $recipe = Recipe::findOrFail($recipeID);
         return view('editRecipe', ['recipe' => $recipe]);
@@ -67,6 +74,19 @@ class RecipeController extends Controller
     {
         $title = $request->input('title');
         $content = $request->input('content');
-        return view('editTempRecipe', ['title' => $title, 'content' => $content]);
+        return view('editTempRecipe', ['title' => $title, 'content' => $content, 'recipeID' => null]);
+    }
+    public function updateTempRecipe(Request $request)
+    {
+        $data = $request->validate([
+            'title' => 'required|string',
+            'content' => 'required|string',
+        ]);
+        // Redirect back to the generatedRecipe view with updated content
+        return view('generatedRecipe', [
+            'recipeBody' => $data['content'],
+            'recipeTitle' => $data['title'],
+            'recipeID' => null
+        ]);
     }
 }

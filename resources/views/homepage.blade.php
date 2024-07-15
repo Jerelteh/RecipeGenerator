@@ -22,7 +22,7 @@
         <ul>
             @foreach ($recipes as $recipe)
                 <li>
-                    <a href="{{ route('view.recipe', ['id' => $recipe->id]) }}">{{ $recipe->title }}</a>
+                    <a href="{{ route('view.recipe.from.home', ['id' => $recipe->id]) }}">{{ $recipe->title }}</a>
                     <form action="{{ route('delete.recipe', ['id' => $recipe->id]) }}" method="POST"
                         style="display:inline;">
                         @csrf
