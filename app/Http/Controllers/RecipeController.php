@@ -14,11 +14,13 @@ class RecipeController extends Controller
         $data = $request->validate([
             'title' => 'required|string',
             'content' => 'required|string',
+            'calories' => 'required|integer',
         ]);
 
         $recipe = new Recipe();
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
+        $recipe->calories = $data['calories'];
         $recipe->user_id = Auth::id(); // associate with logged-in user
         $recipe->save();
 
@@ -40,11 +42,13 @@ class RecipeController extends Controller
         $data = $request->validate([
             'title' => 'required|string',
             'content' => 'required|string',
+            'calories' => 'required|integer',
         ]);
 
         $recipe = Recipe::findOrFail($recipeID);
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
+        $recipe->calories = $data['calories'];
         $recipe->save();
 
         $recipeInput = RecipeInput::where('recipe_id', $recipe->id)->first();
@@ -76,6 +80,7 @@ class RecipeController extends Controller
         return view('viewRecipe', [
             'recipeBody' => $recipe->content,
             'recipeTitle' => $recipe->title,
+            'calories' => $recipe->calories,
             'recipeID' => $recipe->id
         ]);
     }
@@ -94,11 +99,13 @@ class RecipeController extends Controller
         $data = $request->validate([
             'title' => 'required|string',
             'content' => 'required|string',
+            'calories' => 'required|integer',
         ]);
 
         $recipe = Recipe::findOrFail($recipeID);
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
+        $recipe->calories = $data['calories'];
         $recipe->save();
 
         return redirect()->route('view.recipe', ['id' => $recipe->id])->with('status', 'Recipe updated successfully!');
@@ -107,9 +114,11 @@ class RecipeController extends Controller
     {
         $title = $request->input('title');
         $content = $request->input('content');
+        $calories = $request->input('calories');
         return view('editTempRecipe', [
             'title' => $title,
             'content' => $content,
+            'calories' => $calories,
             'recipeID' => $request->input('recipeID'),
             'isEditing' => $request->input('isEditing')
         ]);
@@ -119,11 +128,13 @@ class RecipeController extends Controller
         $data = $request->validate([
             'title' => 'required|string',
             'content' => 'required|string',
+            'calories' => 'required|integer',
         ]);
 
         return view('generatedRecipe', [
             'recipeBody' => $data['content'],
             'recipeTitle' => $data['title'],
+            'calories' => $data['calories'],
             'recipeID' => $request->input('recipeID'),
             'isEditing' => $request->input('isEditing', true) // Ensure isEditing is set when coming from editTempRecipe
         ]);

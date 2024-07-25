@@ -16,6 +16,9 @@
         <div class="">
             {!! nl2br($recipeBody) !!}
         </div>
+        <div>
+            <p><strong>Estimated Calories: </strong>{{ $calories }}</p>
+        </div>
         {{-- START - Generated Recipe Output --}}
 
         <div>
@@ -24,6 +27,7 @@
                 @csrf
                 <input type="hidden" name="title" value="{{ $recipeTitle }}">
                 <input type="hidden" name="content" value="{{ $recipeBody }}">
+                <input type="hidden" name="calories" value="{{ $calories }}">
                 <button type="submit">Save Recipe</button>
             </form>
             {{-- END - save recipe --}}
@@ -47,6 +51,7 @@
                 @csrf
                 <input type="hidden" name="title" value="{{ $recipeTitle }}">
                 <input type="hidden" name="content" value="{{ $recipeBody }}">
+                <input type="hidden" name="calories" value="{{ $calories }}">
                 <input type="hidden" name="recipeID" value="{{ $recipeID }}">
                 <input type="hidden" name="isEditing" value="{{ $isEditing }}">
                 <button type="submit">Edit Recipe</button>
@@ -59,6 +64,7 @@
                     @csrf
                     <input type="hidden" name="title" value="{{ $recipeTitle }}">
                     <input type="hidden" name="content" value="{{ $recipeBody }}">
+                    <input type="hidden" name="calories" value="{{ $calories }}">
                     <button type="submit">Overwrite Existing Recipe</button>
                 </form>
             @endif

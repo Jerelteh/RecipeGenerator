@@ -38,7 +38,8 @@ class openaiController extends Controller
             ->send($message);
 
         $recipeTitle = $this->extractRecipeTitle($response);
-        $recipeBody = $this->removeFirstLine($response);
+        $calories = $this->extractCalories($response);
+        $recipeBody = $this->removeLastLine($this->removeFirstLine($response));
 
         // store the questions in the session for regenerating recipe
         session([
@@ -52,6 +53,7 @@ class openaiController extends Controller
         return view('generatedRecipe', [
             'recipeBody' => $recipeBody,
             'recipeTitle' => $recipeTitle,
+            'calories' => $calories,
             'recipeID' => $request->input('recipeID'), // Pass in recipeID if exists
             'isEditing' => $request->input('isEditing', false)
         ]);
@@ -92,5 +94,16 @@ class openaiController extends Controller
         $line = explode("\n", $response);
         array_shift($line); // removes first line of array
         return implode("\n", $line);
+    }
+    private function removeLastLine($response)
+    {
+        $line = explode("\n", $response);
+        array_pop($line); // Removes the last line of the array
+        return implode("\n", $line);
+    }
+    private function extractCalories($response)
+    {
+        preg_match('/(\d+)\s*calories/', $response, $matches);
+        return isset($matches[1]) ? (int)$matches[1] : null;
     }
 }
