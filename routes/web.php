@@ -22,12 +22,13 @@ require __DIR__ . '/auth.php';
 
 // Recipe Generation __START__
 Route::get('/recipeGenerator', [openaiController::class, 'showRecipeGenerator'])->name('recipe.generator');
-
+Route::get('/recipeGenerator/from-list/{id}', [openaiController::class, 'regenerateFromList'])->name('recipe.generator.from.list');
 Route::post('/submit-input', [openaiController::class, 'submitInput'])->name('submit.input');
 // Recipe Generation __END__
 
 // Recipe CRUD __START__
 Route::post('/save-recipe', [RecipeController::class, 'saveRecipe'])->name('save.recipe');
+Route::post('overwrite-recipe/{id}', [RecipeController::class, 'overwriteRecipe'])->name('overwrite.recipe'); // overwrites/updates existing recipe
 Route::get('/recipe-list', [RecipeController::class, 'listRecipes'])->name('recipe.list');
 Route::get('/recipe/{id}', [RecipeController::class, 'viewRecipe'])->name('view.recipe');
 

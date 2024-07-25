@@ -31,7 +31,7 @@ class Chat
             ->post(
                 'https://api.openai.com/v1/chat/completions',
                 [
-                    "model" => "gpt-3.5-turbo",
+                    "model" => "gpt-4o-mini",
                     "messages" => $this->messages
                 ]
             )->json('choices.0.message.content');

@@ -31,6 +31,13 @@
             {{-- START - Regenerate recipe --}}
             <form action="{{ route('recipe.generator') }}" method="GET">
                 @csrf
+                <input type="hidden" name="question1" value="{{ session('question1') }}">
+                <input type="hidden" name="question2" value="{{ session('question2') }}">
+                <input type="hidden" name="question3" value="{{ session('question3') }}">
+                <input type="hidden" name="question4" value="{{ session('question4') }}">
+                <input type="hidden" name="question5" value="{{ session('question5') }}">
+                <input type="hidden" name="recipeID" value="{{ $recipeID }}">
+                <input type="hidden" name="isEditing" value="{{ $isEditing }}">
                 <button type="submit">Regenerate Recipe</button>
             </form>
             {{-- END - Regenerate recipe --}}
@@ -40,9 +47,22 @@
                 @csrf
                 <input type="hidden" name="title" value="{{ $recipeTitle }}">
                 <input type="hidden" name="content" value="{{ $recipeBody }}">
+                <input type="hidden" name="recipeID" value="{{ $recipeID }}">
+                <input type="hidden" name="isEditing" value="{{ $isEditing }}">
                 <button type="submit">Edit Recipe</button>
             </form>
             {{-- END - To edit recipe --}}
+
+            {{-- START - Overwrite Existing Recipe --}}
+            @if (isset($isEditing) && $isEditing && isset($recipeID))
+                <form action="{{ route('overwrite.recipe', ['id' => $recipeID]) }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="title" value="{{ $recipeTitle }}">
+                    <input type="hidden" name="content" value="{{ $recipeBody }}">
+                    <button type="submit">Overwrite Existing Recipe</button>
+                </form>
+            @endif
+            {{-- END - Overwrite Existing Recipe --}}
         </div>
 
     </div>

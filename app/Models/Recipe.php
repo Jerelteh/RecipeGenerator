@@ -20,4 +20,8 @@ class Recipe extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function inputs()
+    {
+        return $this->hasOne(RecipeInput::class);
+    }
 }

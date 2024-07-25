@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <h1>Recipe List</h1>
+    <h1>Your Recipes (Recipe List)</h1>
     @if (session('status'))
         <div>{{ session('status') }}</div>
     @endif
@@ -21,6 +21,11 @@
             @foreach ($recipes as $recipe)
                 <li>
                     <a href="{{ route('view.recipe', ['id' => $recipe->id]) }}">{{ $recipe->title }}</a>
+                    <form action="{{ route('recipe.generator.from.list', ['id' => $recipe->id]) }}" method="GET">
+                        @csrf
+                        <input type="hidden" name="isEditing" value="1">
+                        <button type="submit">Regenerate Recipe</button>
+                    </form>
                     <form action="{{ route('delete.recipe', ['id' => $recipe->id]) }}" method="POST"
                         style="display:inline;">
                         @csrf

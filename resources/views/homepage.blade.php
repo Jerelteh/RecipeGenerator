@@ -12,13 +12,13 @@
     <h1>Welcome to Lemon</h1>
 
     <h2>Food Recipes</h2>
-    <a href="{{ route('recipe.generator') }}">
+    <a href="{{ route('recipe.generator', ['isEditing' => false]) }}">
         <button>Generate New Recipe</button>
     </a>
     <div>
-        {{-- @if (session('status'))
+        @if (session('status'))
             <p>{{ session('status') }}</p>
-        @endif --}}
+        @endif
         <ul>
             @foreach ($recipes as $recipe)
                 <li>

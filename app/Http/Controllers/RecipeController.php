@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use App\Models\RecipeInput;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,12 +22,44 @@ class RecipeController extends Controller
         $recipe->user_id = Auth::id(); // associate with logged-in user
         $recipe->save();
 
+        RecipeInput::create([
+            'recipe_id' => $recipe->id,
+            'question1' => session('question1'),
+            'question2' => session('question2'),
+            'question3' => session('question3'),
+            'question4' => session('question4'),
+            'question5' => session('question5'),
+        ]);
         // clear session values after saving recipe
-        $this->clearSessionValues();
+        $this->clearRecipeSession();
 
         return redirect()->route('view.recipe', ['id' => $recipe->id])->with('status', 'Recipe saved successfully!');
     }
-    private function clearSessionValues() // clears session values
+    public function overwriteRecipe(Request $request, $recipeID)
+    {
+        $data = $request->validate([
+            'title' => 'required|string',
+            'content' => 'required|string',
+        ]);
+
+        $recipe = Recipe::findOrFail($recipeID);
+        $recipe->title = $data['title'];
+        $recipe->content = $data['content'];
+        $recipe->save();
+
+        $recipeInput = RecipeInput::where('recipe_id', $recipe->id)->first();
+        $recipeInput->update([
+            'question1' => session('question1'),
+            'question2' => session('question2'),
+            'question3' => session('question3'),
+            'question4' => session('question4'),
+            'question5' => session('question5'),
+        ]);
+
+        $this->clearRecipeSession();
+        return redirect()->route('recipe.list')->with('status', 'Recipe overwritten successfully!');
+    }
+    private function clearRecipeSession() // clears session values
     {
         session()->forget(['question1', 'question2', 'question3', 'question4', 'question5']);
     }
@@ -74,7 +107,12 @@ class RecipeController extends Controller
     {
         $title = $request->input('title');
         $content = $request->input('content');
-        return view('editTempRecipe', ['title' => $title, 'content' => $content, 'recipeID' => null]);
+        return view('editTempRecipe', [
+            'title' => $title,
+            'content' => $content,
+            'recipeID' => $request->input('recipeID'),
+            'isEditing' => $request->input('isEditing')
+        ]);
     }
     public function updateTempRecipe(Request $request)
     {
@@ -82,11 +120,12 @@ class RecipeController extends Controller
             'title' => 'required|string',
             'content' => 'required|string',
         ]);
-        // Redirect back to the generatedRecipe view with updated content
+
         return view('generatedRecipe', [
             'recipeBody' => $data['content'],
             'recipeTitle' => $data['title'],
-            'recipeID' => null
+            'recipeID' => $request->input('recipeID'),
+            'isEditing' => $request->input('isEditing', true) // Ensure isEditing is set when coming from editTempRecipe
         ]);
     }
 }
