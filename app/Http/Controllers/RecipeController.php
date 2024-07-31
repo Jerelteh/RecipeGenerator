@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use App\Models\RecipeInput;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,20 +14,56 @@ class RecipeController extends Controller
         $data = $request->validate([
             'title' => 'required|string',
             'content' => 'required|string',
+            'calories' => 'required|integer',
         ]);
 
         $recipe = new Recipe();
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
+        $recipe->calories = $data['calories'];
         $recipe->user_id = Auth::id(); // associate with logged-in user
         $recipe->save();
 
+        RecipeInput::create([
+            'recipe_id' => $recipe->id,
+            'question1' => session('question1'),
+            'question2' => session('question2'),
+            'question3' => session('question3'),
+            'question4' => session('question4'),
+            'question5' => session('question5'),
+        ]);
         // clear session values after saving recipe
-        $this->clearSessionValues();
+        $this->clearRecipeSession();
 
         return redirect()->route('view.recipe', ['id' => $recipe->id])->with('status', 'Recipe saved successfully!');
     }
-    private function clearSessionValues() // clears session values
+    public function overwriteRecipe(Request $request, $recipeID)
+    {
+        $data = $request->validate([
+            'title' => 'required|string',
+            'content' => 'required|string',
+            'calories' => 'required|integer',
+        ]);
+
+        $recipe = Recipe::findOrFail($recipeID);
+        $recipe->title = $data['title'];
+        $recipe->content = $data['content'];
+        $recipe->calories = $data['calories'];
+        $recipe->save();
+
+        $recipeInput = RecipeInput::where('recipe_id', $recipe->id)->first();
+        $recipeInput->update([
+            'question1' => session('question1'),
+            'question2' => session('question2'),
+            'question3' => session('question3'),
+            'question4' => session('question4'),
+            'question5' => session('question5'),
+        ]);
+
+        $this->clearRecipeSession();
+        return redirect()->route('recipe.list')->with('status', 'Recipe overwritten successfully!');
+    }
+    private function clearRecipeSession() // clears session values
     {
         session()->forget(['question1', 'question2', 'question3', 'question4', 'question5']);
     }
@@ -43,6 +80,7 @@ class RecipeController extends Controller
         return view('viewRecipe', [
             'recipeBody' => $recipe->content,
             'recipeTitle' => $recipe->title,
+            'calories' => $recipe->calories,
             'recipeID' => $recipe->id
         ]);
     }
@@ -61,11 +99,13 @@ class RecipeController extends Controller
         $data = $request->validate([
             'title' => 'required|string',
             'content' => 'required|string',
+            'calories' => 'required|integer',
         ]);
 
         $recipe = Recipe::findOrFail($recipeID);
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
+        $recipe->calories = $data['calories'];
         $recipe->save();
 
         return redirect()->route('view.recipe', ['id' => $recipe->id])->with('status', 'Recipe updated successfully!');
@@ -74,19 +114,29 @@ class RecipeController extends Controller
     {
         $title = $request->input('title');
         $content = $request->input('content');
-        return view('editTempRecipe', ['title' => $title, 'content' => $content, 'recipeID' => null]);
+        $calories = $request->input('calories');
+        return view('editTempRecipe', [
+            'title' => $title,
+            'content' => $content,
+            'calories' => $calories,
+            'recipeID' => $request->input('recipeID'),
+            'isEditing' => $request->input('isEditing')
+        ]);
     }
     public function updateTempRecipe(Request $request)
     {
         $data = $request->validate([
             'title' => 'required|string',
             'content' => 'required|string',
+            'calories' => 'required|integer',
         ]);
-        // Redirect back to the generatedRecipe view with updated content
+
         return view('generatedRecipe', [
             'recipeBody' => $data['content'],
             'recipeTitle' => $data['title'],
-            'recipeID' => null
+            'calories' => $data['calories'],
+            'recipeID' => $request->input('recipeID'),
+            'isEditing' => $request->input('isEditing', true) // Ensure isEditing is set when coming from editTempRecipe
         ]);
     }
 }

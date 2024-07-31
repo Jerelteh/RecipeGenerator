@@ -9,30 +9,35 @@
 </head>
 
 <body>
-    <h1>Welcome to Lemon</h1>
+    @include('layouts.sideNavBar')
 
-    <h2>Food Recipes</h2>
-    <a href="{{ route('recipe.generator') }}">
-        <button>Generate New Recipe</button>
-    </a>
-    <div>
-        {{-- @if (session('status'))
-            <p>{{ session('status') }}</p>
-        @endif --}}
-        <ul>
-            @foreach ($recipes as $recipe)
-                <li>
-                    <a href="{{ route('view.recipe.from.home', ['id' => $recipe->id]) }}">{{ $recipe->title }}</a>
-                    <form action="{{ route('delete.recipe', ['id' => $recipe->id]) }}" method="POST"
-                        style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Delete</button>
-                    </form>
-                </li>
-            @endforeach
-        </ul>
+    <div class="main-content">
+        <h1>Welcome to Lemon</h1>
+
+        <h2>Food Recipes</h2>
+        <a href="{{ route('recipe.generator', ['isEditing' => false]) }}">
+            <button>Generate New Recipe</button>
+        </a>
+        <div>
+            @if (session('status'))
+                <p>{{ session('status') }}</p>
+            @endif
+            <ul>
+                @foreach ($recipes as $recipe)
+                    <li>
+                        <a href="{{ route('view.recipe.from.home', ['id' => $recipe->id]) }}">{{ $recipe->title }}</a>
+                        <form action="{{ route('delete.recipe', ['id' => $recipe->id]) }}" method="POST"
+                            style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Delete</button>
+                        </form>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
     </div>
+
 
 </body>
 

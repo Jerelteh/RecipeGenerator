@@ -11,10 +11,10 @@ class openaiController extends Controller
     public function submitInput(Request $request)
     {
         $data = $request->validate([
-            'question1' => 'nullable|string',
+            'question1' => 'nullable|string|max:200',
             'question2' => 'nullable|string',
             'question3' => 'nullable|string',
-            'question4' => 'nullable|string',
+            'question4' => 'nullable|integer|max:1440',
             'question5' => 'required|string',
         ]);
 
@@ -38,8 +38,8 @@ class openaiController extends Controller
             ->send($message);
 
         $recipeTitle = $this->extractRecipeTitle($response);
-        $recipeBody = $this->removeFirstLine($response);
-        // $this->saveRecipe($recipeTitle, $recipeBody);
+        $calories = $this->extractCalories($response);
+        $recipeBody = $this->removeLastLine($this->removeFirstLine($response));
 
         // store the questions in the session for regenerating recipe
         session([
@@ -50,9 +50,15 @@ class openaiController extends Controller
             'question5' => $data['question5'],
         ]);
 
-        return view('generatedRecipe', ['recipeBody' => $recipeBody, 'recipeTitle' => $recipeTitle, 'recipeID' => null]);
+        return view('generatedRecipe', [
+            'recipeBody' => $recipeBody,
+            'recipeTitle' => $recipeTitle,
+            'calories' => $calories,
+            'recipeID' => $request->input('recipeID'), // Pass in recipeID if exists
+            'isEditing' => $request->input('isEditing', false)
+        ]);
     }
-    public function showRecipeGenerator(Request $request) // returns recipeGenerator view and imbue session with values
+    public function showRecipeGenerator(Request $request)
     {
         return view('recipeGenerator', [
             'question1' => session('question1', ''),
@@ -60,6 +66,22 @@ class openaiController extends Controller
             'question3' => session('question3', ''),
             'question4' => session('question4', ''),
             'question5' => session('question5', ''),
+            'isEditing' => $request->input('isEditing', false)
+        ]);
+    }
+    public function regenerateFromList(Request $request, $id)
+    {
+        $recipe = Recipe::findOrFail($id);
+        $input = $recipe->inputs; // Retrieve input values
+
+        return view('recipeGenerator', [
+            'recipeID' => $recipe->id,
+            'question1' => $input->question1,
+            'question2' => $input->question2,
+            'question3' => $input->question3,
+            'question4' => $input->question4,
+            'question5' => $input->question5,
+            'isEditing' => true
         ]);
     }
     private function extractRecipeTitle($response) // retrieves recipeTitle by getting first output line
@@ -73,35 +95,15 @@ class openaiController extends Controller
         array_shift($line); // removes first line of array
         return implode("\n", $line);
     }
-    public function saveRecipe(Request $request)
+    private function removeLastLine($response)
     {
-        $data = $request->validate([
-            'title' => 'required|string',
-            'content' => 'required|string',
-        ]);
-
-        $recipe = new Recipe();
-        $recipe->title = $data['title'];
-        $recipe->content = $data['content'];
-        $recipe->save();
-
-        return redirect()->route('recipe.list')->with('status', 'Recipe saved successfully!');
+        $line = explode("\n", $response);
+        array_pop($line); // Removes the last line of the array
+        return implode("\n", $line);
     }
-    public function deleteRecipe(int $recipeID)
+    private function extractCalories($response)
     {
-        $recipe = Recipe::findOrFail($recipeID);
-        $recipe->delete();
-
-        return redirect()->route('recipe.list')->with('status', 'Recipe deleted successfully!');
-    }
-    public function viewRecipe($recipeID)
-    {
-        $recipe = Recipe::findOrFail($recipeID);
-        return view('viewRecipe', ['recipeBody' => $recipe->content, 'recipeTitle' => $recipe->title]);
-    }
-    public function listRecipes()
-    {
-        $recipes = Recipe::all();
-        return view('recipeList', ['recipes' => $recipes]);
+        preg_match('/(\d+)\s*calories/', $response, $matches);
+        return isset($matches[1]) ? (int)$matches[1] : null;
     }
 }

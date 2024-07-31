@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Recipe Generator</title>
 
+    @include('layouts.sideNavBar')
     <style>
         .selectable {
             display: inline-block;
@@ -18,22 +19,28 @@
         }
 
         .selected {
-            background-color: #ffd600;
+            background-color: #eccb23;
             color: white;
         }
     </style>
 </head>
 
 <body>
-    <div>
-        <h1>Generate a Recipe</h1>
+    <div class="main-content">
+        <h1>Generate Recipe</h1>
         <form action="{{ route('submit.input') }}" method="POST">
             @csrf
+            @if (isset($recipeID))
+                <input type="hidden" name="recipeID" value="{{ $recipeID }}">
+            @endif
+            @if ($isEditing)
+                <input type="hidden" name="isEditing" value="1">
+            @endif
             <div class="form-group">
-                <label for="question1">1. What ingredients do you have on hand?</label>
+                <label for="question1">1. What ingredients do you have on hand? (max 200 characters)</label>
                 <div id="question1">
                     <input type="text" class="form-control" id="question1" name="question1"
-                        value="{{ $question1 }}"><br>
+                        placeholder="e.g. rice, egg, fish etc." value="{{ $question1 }}" maxlength="200"><br>
                 </div>
             </div>
             <div class="form-group">
@@ -58,12 +65,12 @@
                         </div>
                     @endforeach
                 </div>
-                <input type="hidden" id="question3_input" name="question3"><br>
+                <input type="hidden" id="question3_input" name="question3" value="{{ $question3 }}"><br>
             </div>
             <div class="form-group">
                 <label for="question4">4. How much time do you have for cooking (in mins)?</label>
-                <input type="number" class="form-control" id="question4" name="question4"
-                    value="{{ $question4 }}"><br>
+                <input type="number" class="form-control" id="question4" name="question4" value="{{ $question4 }}"
+                    max="1440" min="5" placeholder="max 1440mins(1d)"><br>
             </div>
             <div class="form-group">
                 <label for="question5">5. Level of Cooking Skill:</label>
@@ -78,6 +85,7 @@
                 <input type="hidden" id="question5_input" name="question5" value="{{ $question5 }}"><br>
             </div>
             <button type="submit" class="btn btn-primary">Generate Recipe</button>
+            <button type="button" class="btn btn-secondary" id="cancelButton">Cancel</button>
         </form>
     </div>
 
@@ -105,6 +113,11 @@
             document.getElementById('question3_input').value = question3Selected;
             document.getElementById('question5_input').value = question5Selected;
         }
+
+        // Handle cancel button click
+        document.getElementById('cancelButton').addEventListener('click', () => {
+            history.back();
+        });
     </script>
 </body>
 
