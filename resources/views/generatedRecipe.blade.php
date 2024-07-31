@@ -6,11 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Food Recipe</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="sideBarNavStyle.css">
 </head>
 
 <body>
-    <div>
+    @include('layouts.sideNavBar')
+
+    <div class="main-content">
         {{-- START - Generated Recipe Output --}}
         <h1>{{ $recipeTitle }}</h1>
         <div class="">

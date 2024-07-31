@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Recipe Generator</title>
 
+    @include('layouts.sideNavBar')
     <style>
         .selectable {
             display: inline-block;
@@ -18,14 +19,14 @@
         }
 
         .selected {
-            background-color: #ffd600;
+            background-color: #eccb23;
             color: white;
         }
     </style>
 </head>
 
 <body>
-    <div>
+    <div class="main-content">
         <h1>Generate Recipe</h1>
         <form action="{{ route('submit.input') }}" method="POST">
             @csrf
@@ -39,7 +40,7 @@
                 <label for="question1">1. What ingredients do you have on hand? (max 200 characters)</label>
                 <div id="question1">
                     <input type="text" class="form-control" id="question1" name="question1"
-                        value="{{ $question1 }}" maxlength="200"><br>
+                        placeholder="e.g. rice, egg, fish etc." value="{{ $question1 }}" maxlength="200"><br>
                 </div>
             </div>
             <div class="form-group">

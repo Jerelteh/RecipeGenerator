@@ -10,7 +10,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// for sideNavBar testing
+Route::get('/sideNavBar', function () {
+    return view('/layouts/sideNavBar');
+})->name('sideNavBar');
+
 //////////////////////////////////////////////////////////////////////////////////
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
