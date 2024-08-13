@@ -25,4 +25,8 @@ class Recipe extends Model
     {
         return $this->hasOne(RecipeInput::class);
     }
+    public function cookbooks()
+    {
+        return $this->belongsToMany(Cookbook::class, 'cookbook_recipe');
+    }
 }

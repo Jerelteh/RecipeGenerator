@@ -3,6 +3,9 @@
 use App\Http\Controllers\openaiController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\CookbookController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\Cookbook;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,6 +23,7 @@ Route::get('/sideNavBar', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 Route::get('/homepage', [HomeController::class, 'homepage'])->name('homepage');
 Route::get('/recipe-from-home/{id}', [HomeController::class, 'viewRecipe'])->name('view.recipe.from.home');
@@ -45,3 +49,19 @@ Route::post('/edit-temp-recipe', [RecipeController::class, 'editTempRecipe'])->n
 Route::post('update-temp-recipe', [RecipeController::class, 'updateTempRecipe'])->name('update.temp.recipe'); // update temp recipe
 Route::delete('/delete-recipe/{id}', [RecipeController::class, 'deleteRecipe'])->name('delete.recipe');
 // Recipe CRUD __END__
+
+// Cookbook __START__
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cookbooks', [CookbookController::class, 'listCookbooks'])->name('cookbooks');
+    Route::get('/cookbooks/create', [CookbookController::class, 'createCookbook'])->name('cookbooks.create');
+    Route::post('/cookbookSubmit', [CookbookController::class, 'saveCookbook'])->name('cookbooks.save');
+
+    // View Cookbook details
+    Route::get('/cookbooks/{cookbook}', [CookbookController::class, 'viewCookbook'])->name('cookbooks.view');
+    // Add recipes to Cookbook
+    Route::get('/cookbooks/{cookbook}/add-recipe', [CookbookController::class, 'addRecipeForm'])->name('cookbooks.addRecipeForm');
+    Route::post('/cookbooks/{cookbook}/add-recipe', [CookbookController::class, 'addRecipe'])->name('cookbooks.addRecipe');
+    // Remove recipes from Cookbook
+    Route::delete('/cookbooks/{cookbook}/remove-recipe/{recipe}', [CookbookController::class, 'removeRecipe'])->name('cookbooks.removeRecipe');
+});
+// Cookbook __END__

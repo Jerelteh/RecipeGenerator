@@ -47,7 +47,7 @@
                     </span>Meal Planner</a>
             </li>
             <li>
-                <a href="#"><span class="material-symbols-outlined">
+                <a href="{{ route('cookbooks') }}"><span class="material-symbols-outlined">
                         menu_book
                     </span>Cookbooks</a>
             </li>
@@ -72,9 +72,15 @@
                     </span>Settings</a>
             </li>
             <li>
-                <a href="#"><span class="material-symbols-outlined">
+                <a href="{{ route('logout') }}"
+                    onclick="event.preventdefault(); document.getElementById('logout-form').submit();">
+                    <span class="material-symbols-outlined">
                         logout
-                    </span>Logout</a>
+                    </span>Logout
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </li>
         </ul>
         <div class="user_account">

@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Recipe Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    @include('layouts.sideNavBar')
     <style>
         .selectable {
             display: inline-block;
@@ -26,12 +27,13 @@
 </head>
 
 <body>
+    @include('layouts.sideNavBar')
     <div class="main-content">
         <h1>Generate Recipe</h1>
         <form action="{{ route('submit.input') }}" method="POST">
             @csrf
             @if (isset($recipeID))
-                <input type="hidden" name="recipeID" value="{{ $recipeID }}">
+                <input type="hidden" class="" name="recipeID" value="{{ $recipeID }}">
             @endif
             @if ($isEditing)
                 <input type="hidden" name="isEditing" value="1">
@@ -69,8 +71,11 @@
             </div>
             <div class="form-group">
                 <label for="question4">4. How much time do you have for cooking (in mins)?</label>
-                <input type="number" class="form-control" id="question4" name="question4" value="{{ $question4 }}"
-                    max="1440" min="5" placeholder="max 1440mins(1d)"><br>
+                <div class="col-xs-2">
+                    <input type="number" class="form-control" id="question4" name="question4"
+                        value="{{ $question4 }}" max="1440" min="5" placeholder="max 1440mins(1d)"><br>
+                </div>
+
             </div>
             <div class="form-group">
                 <label for="question5">5. Level of Cooking Skill:</label>
