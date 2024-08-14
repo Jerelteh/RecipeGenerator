@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -31,7 +32,8 @@ class HomeController extends Controller
     public function homepage()
     {
         $recipes = Recipe::all();
-        return view('homepage', ['recipes' => $recipes]);
+        $cookbooks = Auth::user()->cookbooks; // Get cookbooks for the logged-in user
+        return view('homepage', compact('recipes', 'cookbooks'));
     }
     public function viewRecipe($recipeID)
     {
@@ -41,5 +43,10 @@ class HomeController extends Controller
             'recipeBody' => $recipe->content,
             'recipeID' => $recipe->id
         ]);
+    }
+    public function viewRecipeFromHome($id)
+    {
+        $recipe = Recipe::findOrFail($id);
+        return view('viewRecipeFromHome', compact('recipe'));
     }
 }

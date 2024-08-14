@@ -78,4 +78,24 @@ class CookbookController extends Controller
         // Redirect back to the viewCookbook page with a success message
         return redirect()->route('cookbooks.view', $cookbook->id)->with('success', 'Recipe has been removed from the cookbook.');
     }
+
+    public function addRecipeFromHomepage(Request $request)
+    {
+        $request->validate([
+            'cookbook_id' => 'required|exists:cookbooks,id',
+            'recipe_id' => 'required|exists:recipes,id',
+        ]);
+
+        $cookbook = Cookbook::findOrFail($request->cookbook_id);
+
+        // Check if the recipe is already in the cookbook
+        if ($cookbook->recipes()->where('recipe_id', $request->recipe_id)->exists()) {
+            return redirect()->back()->with('error', 'Recipe already exists in the selected cookbook.');
+        }
+
+        // Add the recipe to the cookbook
+        $cookbook->recipes()->attach($request->recipe_id);
+
+        return redirect()->back()->with('success', 'Recipe added to the cookbook successfully!');
+    }
 }

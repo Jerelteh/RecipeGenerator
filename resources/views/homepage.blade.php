@@ -8,6 +8,8 @@
     <title>Lemon Homepage</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
 <body>
@@ -24,23 +26,85 @@
             @if (session('status'))
                 <p>{{ session('status') }}</p>
             @endif
-            <ul>
+
+            {{-- Display succcess/error message --}}
+            @if (session('success'))
+                <div class="alert alert-success" style="border-radius: 10px">
+                    {{ session('success') }}
+                </div>
+            @elseif (session('error'))
+                <div class="alert alert-danger" style="border-radius: 10px">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <ul class="list-group">
                 @foreach ($recipes as $recipe)
-                    <li>
-                        <a href="{{ route('view.recipe.from.home', ['id' => $recipe->id]) }}">{{ $recipe->title }}</a>
-                        <form action="{{ route('delete.recipe', ['id' => $recipe->id]) }}" method="POST"
-                            style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Delete</button>
-                        </form>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <a
+                                href="{{ route('view.recipe.from.home', ['id' => $recipe->id]) }}">{{ $recipe->title }}</a>
+                            <span class="badge badge-pill badge-secondary">{{ $recipe->calories }} kcal</span>
+                        </div>
+
+                        {{-- Save to Cookbook button --}}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                style="border-radius: 15px; text-align: center; position: relative;"
+                                data-target="#saveRecipeModal{{ $recipe->id }}">Save
+                                {{-- <span class="material-symbols-outlined"></span> --}}
+
+                            </button>
+                        </div>
                     </li>
+
+                    <!-- Save to Cookbook Modal -->
+                    <div class="modal fade" id="saveRecipeModal{{ $recipe->id }}" tabindex="-1"
+                        aria-labelledby="saveRecipeModalLabel{{ $recipe->id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="saveRecipeModalLabel{{ $recipe->id }}">Save to
+                                        Cookbook</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form
+                                        action="{{ route('cookbooks.addRecipeFromHomepage', ['recipe_id' => $recipe->id]) }}"
+                                        method="POST">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="cookbook">Select Cookbook</label>
+                                            <select name="cookbook_id" id="cookbook" class="form-control" required>
+                                                @foreach ($cookbooks as $cookbook)
+                                                    <option value="{{ $cookbook->id }}">
+                                                        {{ $cookbook->title }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
             </ul>
         </div>
     </div>
 
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

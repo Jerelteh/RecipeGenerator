@@ -26,7 +26,7 @@ Route::get('/dashboard', function () {
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 Route::get('/homepage', [HomeController::class, 'homepage'])->name('homepage');
-Route::get('/recipe-from-home/{id}', [HomeController::class, 'viewRecipe'])->name('view.recipe.from.home');
+Route::get('/recipe-from-home/{id}', [HomeController::class, 'viewRecipeFromHome'])->name('view.recipe.from.home');
 
 require __DIR__ . '/auth.php';
 
@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
     // Add recipes to Cookbook
     Route::get('/cookbooks/{cookbook}/add-recipe', [CookbookController::class, 'addRecipeForm'])->name('cookbooks.addRecipeForm');
     Route::post('/cookbooks/{cookbook}/add-recipe', [CookbookController::class, 'addRecipe'])->name('cookbooks.addRecipe');
+    Route::post('/cookbooks/add-recipe-homepage', [CookbookController::class, 'addRecipeFromHomepage'])->name('cookbooks.addRecipeFromHomepage');
     // Remove recipes from Cookbook
     Route::delete('/cookbooks/{cookbook}/remove-recipe/{recipe}', [CookbookController::class, 'removeRecipe'])->name('cookbooks.removeRecipe');
 });
