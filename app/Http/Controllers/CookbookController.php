@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cookbook;
 use App\Models\Recipe;
+use App\Models\SavedRecipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,16 +45,37 @@ class CookbookController extends Controller
 
     public function addRecipeForm(Cookbook $cookbook)
     {
-        // $recipes = Recipe::where('user_id', Auth::id())->get(); // Fetch recipes from user account
-        $recipes = Auth::user()->recipes; // Get the user's saved recipes to add to cookbook
-        return view('addRecipeToCookbook', compact('cookbook', 'recipes'));
+        // $userRecipes = Auth::user()->recipes;
+        // $savedRecipes = Auth::user()->savedRecipes;
+
+        // $user = Auth::user();
+        // $userRecipes = $user->recipes;
+        // $savedRecipes = SavedRecipe::where('user_id', $user->id)->with('recipe')->get();
+
+        // $userRecipes = Auth::user()->recipes;
+        // $savedRecipes = Auth::user()->savedRecipes()->with('recipe')->get();
+
+        $userRecipes = Auth::user()->recipes;
+        $savedRecipes = SavedRecipe::where('saved_recipes.user_id', Auth::id())
+            ->join('recipes', 'saved_recipes.recipe_id', '=', 'recipes.id')
+            ->select('recipes.id', 'recipes.title')
+            ->get();
+
+        return view('addRecipeToCookbook', compact('cookbook', 'userRecipes', 'savedRecipes'));
     }
 
     public function addRecipe(Request $request, Cookbook $cookbook)
     {
         $request->validate([
             'recipe_ids' => 'required|array',
-            'recipe_ids.*' => 'exists:recipes,id',
+            'recipe_ids.*' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (!Recipe::where('id', $value)->exists() && !SavedRecipe::where('id', $value)->exists()) {
+                        $fail('The selected recipe does not exist.');
+                    }
+                },
+            ],
         ]);
 
         // Filter out recipes that are already attached to the cookbook
@@ -79,7 +101,7 @@ class CookbookController extends Controller
         return redirect()->route('cookbooks.view', $cookbook->id)->with('success', 'Recipe has been removed from the cookbook.');
     }
 
-    public function addRecipeFromHomepage(Request $request)
+    public function addRecipeFromHomepage(Request $request) // adds recipe to cookbook from homepage
     {
         $request->validate([
             'cookbook_id' => 'required|exists:cookbooks,id',

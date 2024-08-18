@@ -4,6 +4,7 @@ use App\Http\Controllers\openaiController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\CookbookController;
+use App\Http\Controllers\MealplanController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\Cookbook;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,8 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 
 Route::get('/homepage', [HomeController::class, 'homepage'])->name('homepage');
 Route::get('/recipe-from-home/{id}', [HomeController::class, 'viewRecipeFromHome'])->name('view.recipe.from.home');
+Route::post('/save-recipe/{recipe_id}', [HomeController::class, 'saveRecipeFromHome'])->name('home.saveRecipeFromHome'); // saves homepage recipes to table saved_recipes
+Route::delete('/saved-recipes/{id}', [RecipeController::class, 'destroySavedRecipe'])->name('delete.saved.recipe');
 
 require __DIR__ . '/auth.php';
 
@@ -66,3 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/cookbooks/{cookbook}/remove-recipe/{recipe}', [CookbookController::class, 'removeRecipe'])->name('cookbooks.removeRecipe');
 });
 // Cookbook __END__
+
+// Mealplan __START__
+Route::get('/mealplan', [MealplanController::class, 'showMealplan'])->name('mealplan');
+// Mealplan __END__

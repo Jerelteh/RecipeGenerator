@@ -36,6 +36,10 @@
                 <div class="alert alert-danger" style="border-radius: 10px">
                     {{ session('error') }}
                 </div>
+            @elseif (session('warning'))
+                <div class="alert alert-warning" style="border-radius: 10px">
+                    {{ session('warning') }}
+                </div>
             @endif
 
             <ul class="list-group">
@@ -48,13 +52,22 @@
                         </div>
 
                         {{-- Save to Cookbook button --}}
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                style="border-radius: 15px; text-align: center; position: relative;"
-                                data-target="#saveRecipeModal{{ $recipe->id }}">Save
-                                {{-- <span class="material-symbols-outlined"></span> --}}
-
+                        {{-- <div class="btn-group">
+                            <button type="button" class="btn btn-warning" data-toggle="modal"
+                                style="border-radius: 20px; text-align: center; position: relative;"
+                                data-target="#saveRecipeModal{{ $recipe->id }}">+
                             </button>
+                        </div> --}}
+
+                        {{-- Save to Saved Recipes button --}}
+                        <div>
+                            <form action="{{ route('home.saveRecipeFromHome', $recipe->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-warning"
+                                    style="border-radius: 20px; text-align: center;">
+                                    +
+                                </button>
+                            </form>
                         </div>
                     </li>
 

@@ -15,46 +15,94 @@
     @include('layouts.sideNavBar')
 
     <div class="main-content">
-        <h1>Your Recipes (Recipe List)</h1>
         @if (session('status'))
             <div>{{ session('status') }}</div>
         @endif
+        <h1>Your Recipes</h1>
 
-        @if ($recipes->isEmpty())
-            <p>No Saved Recipes</p>
-        @else
-            <ul>
-                @foreach ($recipes as $recipe)
-                    <li>
-                        <div>
-                            <a href="{{ route('view.recipe', ['id' => $recipe->id]) }}">{{ $recipe->title }}</a>
-                            <span class="badge badge-pill badge-secondary">{{ $recipe->calories }} kcal</span>
-                        </div>
+        <div class="content-container">
+            <div class="content-header">
+                <h2>Created Recipes</h2>
+            </div>
 
-                        <form action="{{ route('recipe.generator.from.list', ['id' => $recipe->id]) }}" method="GET">
-                            @csrf
-                            <input type="hidden" name="isEditing" value="1">
-                            <button type="submit" class="btn btn-success">
-                                <span class="material-symbols-outlined">
-                                    autorenew
-                                </span>
-                                {{-- <div>Regenerate</div> --}}
-                            </button>
-                        </form>
-                        <form action="{{ route('delete.recipe', ['id' => $recipe->id]) }}" method="POST"
-                            style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">
-                                <span class="material-symbols-outlined">
-                                    delete
-                                </span>
-                            </button>
-                        </form>
-                    </li>
-                @endforeach
-            </ul>
-        @endif
+            @if ($userRecipes->isEmpty())
+                <p>No Saved Recipes</p>
+            @else
+                <ul>
+                    @foreach ($userRecipes as $userRecipe)
+                        <li>
+                            <div>
+                                <a
+                                    href="{{ route('view.recipe', ['id' => $userRecipe->id]) }}">{{ $userRecipe->title }}</a>
+                                <span class="badge badge-pill badge-secondary">{{ $userRecipe->calories }} kcal</span>
+                            </div>
+
+                            <form action="{{ route('recipe.generator.from.list', ['id' => $userRecipe->id]) }}"
+                                method="GET">
+                                @csrf
+                                <input type="hidden" name="isEditing" value="1">
+                                <button type="submit" class="btn btn-success">
+                                    <span class="material-symbols-outlined">
+                                        autorenew
+                                    </span>
+                                    {{-- <div>Regenerate</div> --}}
+                                </button>
+                            </form>
+                            <form action="{{ route('delete.recipe', ['id' => $userRecipe->id]) }}" method="POST"
+                                style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">
+                                    <span class="material-symbols-outlined">
+                                        delete
+                                    </span>
+                                </button>
+                            </form>
+                        </li>
+                    @endforeach
+                </ul>
+
+                {{-- Pagination for created recipes --}}
+                {{ $userRecipes->links() }}
+            @endif
+        </div>
+
+        {{-- Recipes for saved recipes --}}
+        <div class="content-container">
+            <div class="container-header">
+                <h2>Saved Recipes</h2>
+            </div>
+
+            @if ($savedRecipes->isEmpty())
+                <p>No Saved Recipes</p>
+            @else
+                <ul>
+                    @foreach ($savedRecipes as $savedRecipe)
+                        <li>
+                            <div>
+                                <a href="{{ route('view.recipe', ['id' => $savedRecipe->recipe->id]) }}">
+                                    {{ $savedRecipe->recipe->title }}
+                                </a>
+                                <span class="badge badge-pill badge-secondary">{{ $savedRecipe->recipe->calories }}
+                                    kcal</span>
+                            </div>
+
+                            <form action="{{ route('delete.saved.recipe', ['id' => $savedRecipe->id]) }}"
+                                method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                            </form>
+                        </li>
+                    @endforeach
+                </ul>
+
+                {{-- Pagination for saved recipes --}}
+                {{ $savedRecipes->links() }}
+            @endif
+        </div>
     </div>
 </body>
 

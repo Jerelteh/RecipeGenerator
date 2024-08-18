@@ -42,7 +42,7 @@
             <div class="menu-separator"></div>
 
             <li>
-                <a href="#"><span class="material-symbols-outlined">
+                <a href="{{ route('mealplan') }}"><span class="material-symbols-outlined">
                         calendar_month
                     </span>Meal Planner</a>
             </li>
@@ -55,7 +55,7 @@
                 <a href="{{ route('recipe.list') }}">
                     <span class="material-symbols-outlined">
                         restaurant
-                    </span>Saved Recipes</a>
+                    </span>My Recipes</a>
             </li>
 
             <h4><span>Account</span></h4>

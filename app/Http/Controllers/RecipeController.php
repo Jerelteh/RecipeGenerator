@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use App\Models\SavedRecipe;
 use App\Models\RecipeInput;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,8 +87,16 @@ class RecipeController extends Controller
     }
     public function listRecipes()
     {
-        $recipes = Recipe::where('user_id', Auth::id())->get(); // Fetch recipes for the logged-in user
-        return view('recipeList', ['recipes' => $recipes]);
+        // Fetch recipes from recipes table for the logged-in user with pagination
+        $userRecipes = Recipe::where('user_id', Auth::id())->paginate(10);
+
+        // Fetch recipes from saved_recipes table for the logged-in user with pagination
+        $savedRecipes = SavedRecipe::where('user_id', Auth::id())->paginate(10);
+
+        return view('recipeList', [
+            'userRecipes' => $userRecipes,
+            'savedRecipes' => $savedRecipes,
+        ]);
     }
     public function editRecipe($recipeID) // directing to editRecipe page
     {
@@ -138,5 +147,20 @@ class RecipeController extends Controller
             'recipeID' => $request->input('recipeID'),
             'isEditing' => $request->input('isEditing', true) // Ensure isEditing is set when coming from editTempRecipe
         ]);
+    }
+    public function destroySavedRecipe($id)
+    {
+        // Find the saved recipe by ID and ensure it belongs to the authenticated user
+        $savedRecipe = SavedRecipe::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if ($savedRecipe) {
+            $savedRecipe->delete();
+            return redirect()->back()->with('status', 'Saved recipe deleted successfully!');
+        } else {
+            // If not found or doesn't belong to the user, return a 404 response
+            abort(404, 'Saved recipe not found.');
+        }
     }
 }
