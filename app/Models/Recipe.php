@@ -14,6 +14,7 @@ class Recipe extends Model
         'title',
         'content',
         'calories',
+        'image_url',
         'user_id',
     ];
 
@@ -24,5 +25,13 @@ class Recipe extends Model
     public function inputs()
     {
         return $this->hasOne(RecipeInput::class);
+    }
+    public function cookbooks()
+    {
+        return $this->belongsToMany(Cookbook::class, 'cookbook_recipe');
+    }
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'recipe_tag');
     }
 }

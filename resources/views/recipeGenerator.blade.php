@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Recipe Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    @include('layouts.sideNavBar')
     <style>
         .selectable {
             display: inline-block;
@@ -26,12 +27,13 @@
 </head>
 
 <body>
+    @include('layouts.sideNavBar')
     <div class="main-content">
         <h1>Generate Recipe</h1>
-        <form action="{{ route('submit.input') }}" method="POST">
+        <form id="recipeForm" action="{{ route('submit.input') }}" method="POST">
             @csrf
             @if (isset($recipeID))
-                <input type="hidden" name="recipeID" value="{{ $recipeID }}">
+                <input type="hidden" class="" name="recipeID" value="{{ $recipeID }}">
             @endif
             @if ($isEditing)
                 <input type="hidden" name="isEditing" value="1">
@@ -69,8 +71,11 @@
             </div>
             <div class="form-group">
                 <label for="question4">4. How much time do you have for cooking (in mins)?</label>
-                <input type="number" class="form-control" id="question4" name="question4" value="{{ $question4 }}"
-                    max="1440" min="5" placeholder="max 1440mins(1d)"><br>
+                <div class="col-xs-2">
+                    <input type="number" class="form-control" id="question4" name="question4"
+                        value="{{ $question4 }}" max="1440" min="5" placeholder="max 1440mins(1d)"><br>
+                </div>
+
             </div>
             <div class="form-group">
                 <label for="question5">5. Level of Cooking Skill:</label>
@@ -84,12 +89,18 @@
                 </div>
                 <input type="hidden" id="question5_input" name="question5" value="{{ $question5 }}"><br>
             </div>
-            <button type="submit" class="btn btn-primary">Generate Recipe</button>
+            <button type="submit" id="generateButton"
+                class="btn btn-primary d-flex justify-content-center align-items-center ">
+                <span id="spinner" class="spinner-border spinner-border-sm mr-2" style="display:none;" role="status"
+                    aria-hidden="true"></span>
+                <span>Generate Recipe</span>
+            </button>
             <button type="button" class="btn btn-secondary" id="cancelButton">Cancel</button>
         </form>
     </div>
 
     <script>
+        // for selectables 
         document.querySelectorAll('.selectable').forEach(item => {
             item.addEventListener('click', () => {
                 if (item.parentElement.id === 'question5') {
@@ -113,6 +124,16 @@
             document.getElementById('question3_input').value = question3Selected;
             document.getElementById('question5_input').value = question5Selected;
         }
+
+        // Show spinner and disable button on form submit
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('recipeForm').addEventListener('submit', function() {
+                var spinner = document.getElementById('spinner');
+                spinner.style.display = 'inline-block'; // Show the spinner
+
+                document.getElementById('generateButton').setAttribute('disabled', true);
+            });
+        });
 
         // Handle cancel button click
         document.getElementById('cancelButton').addEventListener('click', () => {

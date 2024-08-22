@@ -6,20 +6,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $recipeTitle }}</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        .tag-btn {
+            position: relative;
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            background-color: #f8f8f8;
+            cursor: pointer;
+        }
+
+        .tag-btn:hover .remove-tag {
+            display: inline;
+        }
+
+        .remove-tag {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: -10px;
+            font-weight: bold;
+            color: red;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
-    {{-- START - recipe details --}}
-    <h1>{{ $recipeTitle }}</h1>
-    <div class="">
-        {!! nl2br($recipeBody) !!}
+    @include('layouts.sideNavBar')
+
+    <div class="main-content">
+        <div class="content-container">
+            @include('layouts.sessionMessage')
+            <div class="row align-items-center">
+                {{-- Recipe Image --}}
+                <div class="col-md-6">
+                    <div class="recipe-image">
+                        <img src="{{ $imageUrl }}" alt="Generated Image" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+
+            {{-- START - recipe details --}}
+            <span class="recipe-title">{{ $recipeTitle }}</span>
+            <div class="recipe-details">
+                <!-- Display existing tags -->
+                <div class="mt-3">
+                    <h5>Tags:</h5>
+                    <ul id="tagList">
+                        @foreach ($tags as $tag)
+                            <li class="tag-btn">
+                                {{ $tag->name }}
+                                <span class="remove-tag"
+                                    onclick="event.preventDefault(); document.getElementById('remove-tag-{{ $tag->id }}').submit();">
+                                    &times;
+                                </span>
+                                <form id="remove-tag-{{ $tag->id }}"
+                                    action="{{ route('recipes.removeTag', ['recipeID' => $recipeID, 'tagID' => $tag->id]) }}"
+                                    method="POST" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <!-- Button to trigger the Tag Modal -->
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tagModal">
+                    Add Tags
+                </button>
+                <div>
+                    {!! nl2br($recipeBody) !!}
+                </div>
+
+                <div>
+                    <p><strong>Estimated Calories: </strong>
+                        <span class="badge badge-pill badge-secondary">
+                            {{ $calories }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            {{-- END - recipe details --}}
+
+            <button type="button" class="btn btn-secondary" onclick="{{ route('recipe.list') }}">Back
+            </button>
+            <button type="button" class="btn btn-warning" onclick="{{ route('edit.recipe', ['id' => $recipeID]) }}">
+                <a href="" style="color: white">Edit Recipe</a>
+            </button>
+
+            {{-- tags button modal --}}
+            <div class="modal fade" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="tagModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tagModalLabel">Add Tags</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="tagForm" method="POST"
+                                action="{{ route('recipes.addTags', ['recipeID' => $recipeID]) }}">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="tags">Select Tags:</label>
+                                    <select name="tags[]" id="tags" class="form-control" multiple required>
+                                        @foreach ($allTags as $tag)
+                                            <option value="{{ $tag }}">{{ $tag }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Tag</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-    <div>
-        <p><strong>Estimated Calories: </strong>{{ $calories }}</p>
-    </div>
-    {{-- END - recipe details --}}
-    <a href="{{ route('edit.recipe', ['id' => $recipeID]) }}">Edit Recipe</a>
-    <a href="{{ route('recipe.list') }}">Back</a>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6Hty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

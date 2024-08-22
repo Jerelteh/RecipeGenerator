@@ -42,12 +42,12 @@
             <div class="menu-separator"></div>
 
             <li>
-                <a href="#"><span class="material-symbols-outlined">
+                <a href="{{ route('mealplan') }}"><span class="material-symbols-outlined">
                         calendar_month
                     </span>Meal Planner</a>
             </li>
             <li>
-                <a href="#"><span class="material-symbols-outlined">
+                <a href="{{ route('cookbooks') }}"><span class="material-symbols-outlined">
                         menu_book
                     </span>Cookbooks</a>
             </li>
@@ -55,7 +55,7 @@
                 <a href="{{ route('recipe.list') }}">
                     <span class="material-symbols-outlined">
                         restaurant
-                    </span>Saved Recipes</a>
+                    </span>My Recipes</a>
             </li>
 
             <h4><span>Account</span></h4>
@@ -72,9 +72,15 @@
                     </span>Settings</a>
             </li>
             <li>
-                <a href="#"><span class="material-symbols-outlined">
+                <a href="{{ route('logout') }}"
+                    onclick="event.preventdefault(); document.getElementById('logout-form').submit();">
+                    <span class="material-symbols-outlined">
                         logout
-                    </span>Logout</a>
+                    </span>Logout
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </li>
         </ul>
         <div class="user_account">

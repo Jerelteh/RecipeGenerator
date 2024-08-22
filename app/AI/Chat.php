@@ -38,4 +38,18 @@ class Chat
 
         return $response;
     }
+    public function generateImage(string $prompt)
+    {
+        $response = Http::withToken(config('services.openai.apiKey'))
+            ->post(
+                'https://api.openai.com/v1/images/generations',
+                [
+                    "prompt" => $prompt,
+                    "n" => 1,
+                    "size" => "512x512"
+                ]
+            )->json('data.0.url');
+
+        return $response;
+    }
 }
