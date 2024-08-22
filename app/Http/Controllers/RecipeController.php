@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use App\Models\Tag;
 use App\Models\SavedRecipe;
 use App\Models\RecipeInput;
 use Illuminate\Http\Request;
@@ -16,12 +17,14 @@ class RecipeController extends Controller
             'title' => 'required|string',
             'content' => 'required|string',
             'calories' => 'required|integer',
+            'image_url' => 'nullable|string',
         ]);
 
         $recipe = new Recipe();
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
         $recipe->calories = $data['calories'];
+        $recipe->image_url = session('image_url');
         $recipe->user_id = Auth::id(); // associate with logged-in user
         $recipe->save();
 
@@ -36,7 +39,7 @@ class RecipeController extends Controller
         // clear session values after saving recipe
         $this->clearRecipeSession();
 
-        return redirect()->route('view.recipe', ['id' => $recipe->id])->with('status', 'Recipe saved successfully!');
+        return redirect()->route('view.recipe', ['id' => $recipe->id])->with('success', 'Recipe saved successfully!');
     }
     public function overwriteRecipe(Request $request, $recipeID)
     {
@@ -44,12 +47,14 @@ class RecipeController extends Controller
             'title' => 'required|string',
             'content' => 'required|string',
             'calories' => 'required|integer',
+            'image_url' => 'nullable|string',
         ]);
 
         $recipe = Recipe::findOrFail($recipeID);
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
         $recipe->calories = $data['calories'];
+        $recipe->image_url = $data['image_url'];
         $recipe->save();
 
         $recipeInput = RecipeInput::where('recipe_id', $recipe->id)->first();
@@ -62,27 +67,28 @@ class RecipeController extends Controller
         ]);
 
         $this->clearRecipeSession();
-        return redirect()->route('recipe.list')->with('status', 'Recipe overwritten successfully!');
-    }
-    private function clearRecipeSession() // clears session values
-    {
-        session()->forget(['question1', 'question2', 'question3', 'question4', 'question5']);
+        return redirect()->route('recipe.list')->with('success', 'Recipe overwritten successfully!');
     }
     public function deleteRecipe(int $recipeID)
     {
         $recipe = Recipe::findOrFail($recipeID);
         $recipe->delete();
 
-        return redirect()->route('recipe.list')->with('status', 'Recipe deleted successfully!');
+        return redirect()->route('recipe.list')->with('success', 'Recipe deleted successfully!');
     }
     public function viewRecipe($recipeID)
     {
         $recipe = Recipe::findOrFail($recipeID);
+        $tags = $recipe->tags;
+
         return view('viewRecipe', [
             'recipeBody' => $recipe->content,
             'recipeTitle' => $recipe->title,
             'calories' => $recipe->calories,
-            'recipeID' => $recipe->id
+            'imageUrl' => $recipe->image_url,
+            'recipeID' => $recipe->id,
+            'tags' => $tags, // pass the collection of tag objects
+            'allTags' => Tag::all()->pluck('name', 'id'), // fetch all available tags
         ]);
     }
     public function listRecipes()
@@ -117,7 +123,7 @@ class RecipeController extends Controller
         $recipe->calories = $data['calories'];
         $recipe->save();
 
-        return redirect()->route('view.recipe', ['id' => $recipe->id])->with('status', 'Recipe updated successfully!');
+        return redirect()->route('view.recipe', ['id' => $recipe->id])->with('success', 'Recipe updated successfully!');
     }
     public function editTempRecipe(Request $request)
     {
@@ -157,10 +163,44 @@ class RecipeController extends Controller
 
         if ($savedRecipe) {
             $savedRecipe->delete();
-            return redirect()->back()->with('status', 'Saved recipe deleted successfully!');
+            return redirect()->back()->with('success', 'Saved recipe deleted successfully!');
         } else {
             // If not found or doesn't belong to the user, return a 404 response
             abort(404, 'Saved recipe not found.');
         }
+    }
+    public function addTags(Request $request, $recipeID)
+    {
+        $recipe = Recipe::findOrFail($recipeID);
+
+        // Get the selected tag names from the request
+        $selectedTag = $request->input('tags', []);
+        // Retrieve the Tag IDs based on the selected tag names
+        $tagIDs = Tag::whereIn('name', $selectedTag)->pluck('id')->toArray();
+
+        // Filter out tags that are already attached to the recipe
+        $existingTagIDs = $recipe->tags()->pluck('tags.id')->toArray();
+        $newTagIDs = array_diff($tagIDs, $existingTagIDs);
+
+        if (empty($newTagIDs)) { // If tag already exist, redirect with a warning
+            return redirect()->route('view.recipe', ['id' => $recipeID])
+                ->with('warning', 'Selected tag already exist in the recipe.');
+        }
+
+        // Attach only the new tags to the recipe
+        $recipe->tags()->attach($newTagIDs);
+
+        return redirect()->route('view.recipe', ['id' => $recipeID])
+            ->with('success', 'Tag added successfully!');
+    }
+    public function removeTag(Request $request, $recipeID, $tagID)
+    {
+        $recipe = Recipe::findOrFail($recipeID);
+        $recipe->tags()->detach($tagID);
+        return redirect()->route('view.recipe', ['id' => $recipeID])->with('success', 'Tag removed successfully!');
+    }
+    private function clearRecipeSession() // clears session values
+    {
+        session()->forget(['question1', 'question2', 'question3', 'question4', 'question5', 'image_url']);
     }
 }

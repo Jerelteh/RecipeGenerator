@@ -53,6 +53,10 @@ Route::post('update-temp-recipe', [RecipeController::class, 'updateTempRecipe'])
 Route::delete('/delete-recipe/{id}', [RecipeController::class, 'deleteRecipe'])->name('delete.recipe');
 // Recipe CRUD __END__
 
+// Recipe Tags
+Route::post('/recipes/{recipeID}/addTags', [RecipeController::class, 'addTags'])->name('recipes.addTags');
+Route::delete('/recipes/{recipeID}/tags/{tagID}', [RecipeController::class, 'removeTag'])->name('recipes.removeTag');
+
 // Cookbook __START__
 Route::middleware(['auth'])->group(function () {
     Route::get('/cookbooks', [CookbookController::class, 'listCookbooks'])->name('cookbooks');

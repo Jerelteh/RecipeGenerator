@@ -15,10 +15,8 @@
     @include('layouts.sideNavBar')
 
     <div class="main-content">
-        @if (session('status'))
-            <div>{{ session('status') }}</div>
-        @endif
         <h1>Your Recipes</h1>
+        @include('layouts.sessionMessage')
 
         <div class="content-container">
             <div class="content-header">
@@ -87,8 +85,8 @@
                                     kcal</span>
                             </div>
 
-                            <form action="{{ route('delete.saved.recipe', ['id' => $savedRecipe->id]) }}"
-                                method="POST" style="display: inline;">
+                            <form action="{{ route('delete.saved.recipe', ['id' => $savedRecipe->id]) }}" method="POST"
+                                style="display: inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">

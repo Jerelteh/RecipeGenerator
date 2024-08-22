@@ -37,10 +37,16 @@ class openaiController extends Controller
                             3. Last line of the output must be the estimated calorie')
             ->send($message);
 
+        // Recipe Contents
         $recipeTitle = $this->extractRecipeTitle($response);
         $calories = $this->extractCalories($response);
         $recipeBody = $this->removeLastLine($this->removeFirstLine($response));
 
+        // Image
+        $imageUrl = $input->generateImage("A photorealistic image of {{$recipeTitle}}. Close-up shot but with view of the whole plate, with emphasis on textures, colors, food in ceramic plate.");
+
+        // Store the image URL in session for future use
+        session(['image_url' => $imageUrl]);
         // store the questions in the session for regenerating recipe
         session([
             'question1' => $data['question1'],
@@ -54,12 +60,15 @@ class openaiController extends Controller
             'recipeBody' => $recipeBody,
             'recipeTitle' => $recipeTitle,
             'calories' => $calories,
-            'recipeID' => $request->input('recipeID'), // Pass in recipeID if exists
+            'imageUrl' => $imageUrl,
+            'recipeID' => $request->input('recipeID'),
             'isEditing' => $request->input('isEditing', false)
         ]);
     }
     public function showRecipeGenerator(Request $request)
     {
+        // session()->forget(['question1', 'question2', 'question3', 'question4', 'question5', 'image_url']);
+        session()->forget(['question1', 'question2', 'question3', 'question4', 'question5']);
         return view('recipeGenerator', [
             'question1' => session('question1', ''),
             'question2' => session('question2', ''),
