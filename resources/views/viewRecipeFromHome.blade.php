@@ -10,29 +10,52 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/viewRecipeTags.css') }}">
 </head>
 
 <body>
     @include('layouts.sideNavBar')
     <div class="main-content">
-        <h1>{{ $recipe->title }}</h1>
-        <div class="">
-            {!! nl2br(e($recipe->content)) !!}
-        </div>
-        <div>
-            <h4><strong>Estimated Calories: </strong>
-                <div class="badge badge-pill badge-secondary">
-                    {{ $recipe->calories }}
+        <div class="content-container">
+            <div class="row align-items-center">
+                {{-- Recipe Image --}}
+                <div class="col-md-6">
+                    <div class="recipe-image">
+                        <img src="{{ $recipe->image_url }}" alt="Generated Image" class="img-fluid">
+                    </div>
                 </div>
-                kcal
-            </h4>
+            </div>
+            <span class="recipe-title">{{ $recipe->title }}</span>
+            <div class="recipe-details">
+                <!-- Display existing tags -->
+                <div class="mt-3">
+                    <h5>Tags:</h5>
+                    <ul id="tagList">
+                        @foreach ($tags as $tag)
+                            <li class="tag-btn">
+                                {{ $tag->name }}
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div>
+                    {!! nl2br(e($recipe->content)) !!}
+                </div>
+
+            </div>
+            <div>
+                <h4><strong>Estimated Calories: </strong>
+                    <div class="badge badge-pill badge-secondary">
+                        {{ $recipe->calories }}
+                    </div>
+                    kcal
+                </h4>
+            </div>
+            <a href="{{ url()->previous() }}" class="btn btn-secondary" style="border-radius: 15px">
+                Back
+            </a>
         </div>
-        <a href="{{ url()->previous() }}" class="btn btn-secondary" style="border-radius: 15px">
-            <span class="material-symbols-outlined">
-                keyboard_return
-            </span>
-            Back
-        </a>
+
     </div>
 
 </body>

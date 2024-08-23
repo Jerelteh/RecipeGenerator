@@ -10,33 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <style>
-        .tag-btn {
-            position: relative;
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 15px;
-            background-color: #f8f8f8;
-            cursor: pointer;
-        }
-
-        .tag-btn:hover .remove-tag {
-            display: inline;
-        }
-
-        .remove-tag {
-            display: none;
-            position: absolute;
-            top: 0;
-            right: -10px;
-            font-weight: bold;
-            color: red;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/viewRecipeTags.css') }}">
 </head>
 
 <body>
@@ -79,7 +53,8 @@
                     </ul>
                 </div>
                 <!-- Button to trigger the Tag Modal -->
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tagModal">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tagModal"
+                    style="border-radius: 15px">
                     Add Tags
                 </button>
                 <div>
@@ -96,9 +71,11 @@
             </div>
             {{-- END - recipe details --}}
 
-            <button type="button" class="btn btn-secondary" onclick="{{ route('recipe.list') }}">Back
+            <button type="button" class="btn btn-secondary" onclick="{{ route('recipe.list') }}"
+                style="border-radius: 15px">Back
             </button>
-            <button type="button" class="btn btn-warning" onclick="{{ route('edit.recipe', ['id' => $recipeID]) }}">
+            <button type="button" class="btn btn-warning" onclick="{{ route('edit.recipe', ['id' => $recipeID]) }}"
+                style="border-radius: 15px">
                 <a href="" style="color: white">Edit Recipe</a>
             </button>
 

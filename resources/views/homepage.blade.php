@@ -10,6 +10,20 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .carousel-item img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .carousel-caption {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,6 +31,28 @@
 
     <div class="main-content">
         <h1>Welcome to Lemon</h1>
+
+        <div id="recipeCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                @foreach ($recentRecipes as $index => $recipe)
+                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                        <img src="{{ $recipe->image_url }}" alt="{{ $recipe->title }}">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>{{ $recipe->title }}</h5>
+                            <p>{{ $recipe->calories }} kcal</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <a class="carousel-control-prev" href="#recipeCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#recipeCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
 
         <h2>Food Recipes</h2>
         <a href="{{ route('recipe.generator', ['isEditing' => false]) }}">
@@ -27,20 +63,7 @@
                 <p>{{ session('status') }}</p>
             @endif
 
-            {{-- Display succcess/error message --}}
-            @if (session('success'))
-                <div class="alert alert-success" style="border-radius: 10px">
-                    {{ session('success') }}
-                </div>
-            @elseif (session('error'))
-                <div class="alert alert-danger" style="border-radius: 10px">
-                    {{ session('error') }}
-                </div>
-            @elseif (session('warning'))
-                <div class="alert alert-warning" style="border-radius: 10px">
-                    {{ session('warning') }}
-                </div>
-            @endif
+            @include('layouts.sessionMessage')
 
             <ul class="list-group">
                 @foreach ($recipes as $recipe)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Recipe;
 use App\Models\SavedRecipe;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,17 @@ class HomeController extends Controller
     {
         $recipes = Recipe::all();
         $cookbooks = Auth::user()->cookbooks; // Get cookbooks for the logged-in user
-        return view('homepage', compact('recipes', 'cookbooks'));
+        // return view('homepage', compact('recipes', 'cookbooks'));
+        // Fetch the latest 5 recipes with images
+        $recentRecipes = Recipe::whereNotNull('image_url')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+        return view('homepage', [
+            'recentRecipes' => $recentRecipes,
+            'recipes' => $recipes,
+            'cookbooks' => $cookbooks,
+        ]);
     }
     public function viewRecipe($recipeID)
     {
@@ -48,7 +59,12 @@ class HomeController extends Controller
     public function viewRecipeFromHome($id)
     {
         $recipe = Recipe::findOrFail($id);
-        return view('viewRecipeFromHome', compact('recipe'));
+        $tags = $recipe->tags;
+        return view('viewRecipeFromHome', [
+            'recipe' => $recipe,
+            'tags' => $tags,
+            'allTags' => Tag::all()->pluck('name', 'id'),
+        ]);
     }
 
     public function saveRecipeFromHome(Request $request, $recipe_id)

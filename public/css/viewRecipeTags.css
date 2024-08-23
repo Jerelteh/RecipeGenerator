@@ -1,0 +1,24 @@
+.tag-btn {
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+}
+
+.tag-btn:hover .remove-tag {
+    display: inline;
+}
+
+.remove-tag {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: -10px;
+    font-weight: bold;
+    color: red;
+    cursor: pointer;
+}
