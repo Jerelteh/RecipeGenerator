@@ -27,9 +27,9 @@ class openaiController extends Controller
         $response = $input
             ->systemMessage('You are a text to recipe generator. You will generate the following things accordingly: 
                             detailed but short steps, ingredients used, estimated completion time, estimated calorie. 
-                            Recipe should cater to novice cooking skill level by default unless specified.
+                            Recipe should cater to normal cooking skill level by default unless specified.
                             If preferred time is not provided by user, an estimated time must be provided.
-                            If Cooking skill is advanced, add extra ingredients and steps, if PRO cooking skill, add even more on top of advanced.
+                            If Cooking skill is advanced, add extra ingredients and steps.
                             Data to be listed in sequence: simple recipe Title, ingredients, estimated time required, steps, estimated calorie.
                             PS: 
                             1. for the recipe title, just output the title without actually writing "recipe title: "
@@ -44,11 +44,13 @@ class openaiController extends Controller
 
         // Image
         $imageUrl = $input->generateImage("A photorealistic image of {{$recipeTitle}}. Close-up shot but with view of the whole plate, with emphasis on textures, colors, food in ceramic plate.");
+        // Download the image from the URL and convert it to binary data
+        $image = file_get_contents($imageUrl);
 
-        // Store the image URL in session for future use
-        session(['image_url' => $imageUrl]);
         // store the questions in the session for regenerating recipe
         session([
+            'image_url' => $imageUrl,
+            'image' => $image,
             'question1' => $data['question1'],
             'question2' => $data['question2'],
             'question3' => $data['question3'],
@@ -60,7 +62,7 @@ class openaiController extends Controller
             'recipeBody' => $recipeBody,
             'recipeTitle' => $recipeTitle,
             'calories' => $calories,
-            'imageUrl' => $imageUrl,
+            'image' => $image,
             'recipeID' => $request->input('recipeID'),
             'isEditing' => $request->input('isEditing', false)
         ]);

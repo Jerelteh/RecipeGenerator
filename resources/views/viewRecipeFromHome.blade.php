@@ -21,7 +21,7 @@
                 {{-- Recipe Image --}}
                 <div class="col-md-6">
                     <div class="recipe-image">
-                        <img src="{{ $recipe->image_url }}" alt="Generated Image" class="img-fluid">
+                        <img src="data:image/jpeg;base64,{{ $recipe->image }}" alt="Generated Image" class="img-fluid">
                     </div>
                 </div>
             </div>

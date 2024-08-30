@@ -41,11 +41,11 @@
             <h4><span>General</span></h4>
             <div class="menu-separator"></div>
 
-            <li>
+            {{-- <li>
                 <a href="{{ route('mealplan') }}"><span class="material-symbols-outlined">
                         calendar_month
                     </span>Meal Planner</a>
-            </li>
+            </li> --}}
             <li>
                 <a href="{{ route('cookbooks') }}"><span class="material-symbols-outlined">
                         menu_book
@@ -68,8 +68,8 @@
             </li>
             <li>
                 <a href="#"><span class="material-symbols-outlined">
-                        settings
-                    </span>Settings</a>
+                        analytics
+                    </span>Analytics</a>
             </li>
             <li>
                 <a href="{{ route('logout') }}"

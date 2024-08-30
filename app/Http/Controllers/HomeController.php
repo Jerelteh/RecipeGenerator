@@ -31,18 +31,23 @@ class HomeController extends Controller
     }
 
     //////////////////////////////////////////////////////////////////
-    public function homepage() // displays all recipes from recipes table
+    public function homepage()
     {
         $recipes = Recipe::all();
         $cookbooks = Auth::user()->cookbooks; // Get cookbooks for the logged-in user
-        // return view('homepage', compact('recipes', 'cookbooks'));
+
         // Fetch the latest 5 recipes with images
-        $recentRecipes = Recipe::whereNotNull('image_url')
+        $recentRecipes = Recipe::whereNotNull('image')
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
+
+        // Fetch all tags for the category cards
+        $categories = Tag::all();
+
         return view('homepage', [
             'recentRecipes' => $recentRecipes,
+            'categories' => $categories,
             'recipes' => $recipes,
             'cookbooks' => $cookbooks,
         ]);

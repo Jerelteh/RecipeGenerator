@@ -5,6 +5,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\CookbookController;
 use App\Http\Controllers\MealplanController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SortController;
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\Cookbook;
 use Illuminate\Support\Facades\Route;
@@ -77,3 +80,20 @@ Route::middleware(['auth'])->group(function () {
 // Mealplan __START__
 Route::get('/mealplan', [MealplanController::class, 'showMealplan'])->name('mealplan');
 // Mealplan __END__
+
+// Tags __START__
+Route::get('/recipes/tag/{tag}', [RecipeController::class, 'recipesByTag'])->name('recipes.byTag');
+// Tags __END__
+
+// Recipe Search Bar __START__
+Route::get('/search-suggestions', [SearchController::class, 'suggestions'])->name('search.suggestions');
+Route::get('/search', [SearchController::class, 'search'])->name('search.recipes');
+// Recipe Search Bar __END__
+
+// Recipe Sort __START__
+Route::get('/sort/{viewType}/{tagID?}', [SortController::class, 'sortBy'])->name('sort.by');
+// Recipe Sort __END__
+
+// Analytics __START__
+Route::get('/analytics', [AnalyticsController::class, 'showAnalytics'])->name('analytics');
+// Analytics __END__

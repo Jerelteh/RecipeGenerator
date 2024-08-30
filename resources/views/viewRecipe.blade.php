@@ -23,7 +23,12 @@
                 {{-- Recipe Image --}}
                 <div class="col-md-6">
                     <div class="recipe-image">
-                        <img src="{{ $imageUrl }}" alt="Generated Image" class="img-fluid">
+                        @if ($image)
+                            <img src="data:image/jpeg;base64,{{ $image }}" alt="Generated Image"
+                                class="img-fluid">
+                        @else
+                            <p>No image available</p>
+                        @endif
                     </div>
                 </div>
             </div>
