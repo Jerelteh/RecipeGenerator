@@ -67,7 +67,7 @@
                     </span>Profile</a>
             </li>
             <li>
-                <a href="#"><span class="material-symbols-outlined">
+                <a href="{{ route('analytics') }}"><span class="material-symbols-outlined">
                         analytics
                     </span>Analytics</a>
             </li>

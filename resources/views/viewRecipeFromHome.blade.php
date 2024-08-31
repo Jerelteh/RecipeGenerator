@@ -25,7 +25,21 @@
                     </div>
                 </div>
             </div>
-            <span class="recipe-title">{{ $recipe->title }}</span>
+
+            {{-- START - Recipe Details --}}
+            <!-- Recipe Title -->
+            <span class="recipe-title">{{ $recipe->title }}
+                <!-- Share Button -->
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#shareModal"
+                    style="border-radius: 15px; padding-top: 13px;">
+                    <span class="material-symbols-outlined">
+                        share
+                    </span>
+                </button>
+            </span>
+            <!-- Include the Share Modal -->
+            @include('partials.shareRecipeModal')
+
             <div class="recipe-details">
                 <!-- Display existing tags -->
                 <div class="mt-3">
@@ -46,11 +60,15 @@
             <div>
                 <h4><strong>Estimated Calories: </strong>
                     <div class="badge badge-pill badge-secondary">
-                        {{ $recipe->calories }}
+                        <div class="display-calorie-badge">
+                            {{ $recipe->calories }}
+                        </div>
                     </div>
                     kcal
                 </h4>
             </div>
+            {{-- END - recipe details --}}
+
             <a href="{{ url()->previous() }}" class="btn btn-secondary" style="border-radius: 15px">
                 Back
             </a>

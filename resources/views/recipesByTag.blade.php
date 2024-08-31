@@ -13,7 +13,7 @@
     @include('layouts.sideNavBar')
 
     <div class="main-content">
-        <h1>Recipes with {{ $tag->name }} Tag</h1>
+        <h1>Recipes tagged with "{{ $tag->name }}"</h1>
         @include('layouts.sessionMessage')
 
         @if ($recipes->isEmpty())

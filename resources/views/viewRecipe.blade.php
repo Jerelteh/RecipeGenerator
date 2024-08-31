@@ -34,7 +34,20 @@
             </div>
 
             {{-- START - recipe details --}}
-            <span class="recipe-title">{{ $recipeTitle }}</span>
+            <!-- Recipe Title -->
+            <span class="recipe-title">{{ $recipeTitle }}
+                <!-- Share Button -->
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#shareModal"
+                    style="border-radius: 15px; padding-top: 13px;">
+                    <span class="material-symbols-outlined">
+                        share
+                    </span>
+                </button>
+            </span>
+
+            <!-- Include the Share Modal -->
+            @include('partials.shareRecipeModal')
+
             <div class="recipe-details">
                 <!-- Display existing tags -->
                 <div class="mt-3">
@@ -67,11 +80,14 @@
                 </div>
 
                 <div>
-                    <p><strong>Estimated Calories: </strong>
-                        <span class="badge badge-pill badge-secondary">
-                            {{ $calories }}
-                        </span>
-                    </p>
+                    <h4><strong>Estimated Calories: </strong>
+                        <div class="badge badge-pill badge-secondary">
+                            <div class="display-calorie-badge">
+                                {{ $calories }}
+                            </div>
+                        </div>
+                        kcal
+                    </h4>
                 </div>
             </div>
             {{-- END - recipe details --}}
