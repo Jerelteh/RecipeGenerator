@@ -8,6 +8,7 @@ use App\Http\Controllers\MealplanController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SortController;
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\BodyFatController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\Cookbook;
 use Illuminate\Support\Facades\Route;
@@ -97,3 +98,8 @@ Route::get('/sort/{viewType}/{tagID?}', [SortController::class, 'sortBy'])->name
 // Analytics __START__
 Route::get('/analytics', [AnalyticsController::class, 'showAnalytics'])->name('analytics');
 // Analytics __END__
+
+// BodyFat __START__
+Route::get('/body-fat-calculator', [BodyFatController::class, 'showCalculator'])->name('body.fat.calculator');
+Route::post('/body-fat-calculator', [BodyFatController::class, 'calculateBodyFat'])->name('body.fat.calculate');
+// BodyFat __END__

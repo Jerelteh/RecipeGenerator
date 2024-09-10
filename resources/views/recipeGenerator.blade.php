@@ -91,6 +91,11 @@
                     </div>
                     <input type="hidden" id="question5_input" name="question5" value="{{ $question5 }}"><br>
                 </div>
+                <div class="form-group">
+                    <label for="question6">6. Enter Recipe Idea or Any Remarks (optional):</label>
+                    <textarea class="form-control" id="question6" name="question6" rows="3"
+                        placeholder="e.g. Want something low-calorie, prefer spicy foods...">{{ $question6 ?? '' }}</textarea><br>
+                </div>
                 <button type="submit" id="generateButton"
                     class="btn btn-primary d-flex justify-content-center align-items-center ">
                     <span id="spinner" class="spinner-border spinner-border-sm mr-2" style="display:none;"

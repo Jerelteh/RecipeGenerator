@@ -16,6 +16,7 @@ class openaiController extends Controller
             'question3' => 'nullable|string',
             'question4' => 'nullable|integer|max:1440',
             'question5' => 'required|string',
+            'question6' => 'nullable|string',
         ]);
 
         $input = new Chat();
@@ -23,7 +24,8 @@ class openaiController extends Controller
                     Available Food Preparation Appliances: {$data['question2']}\n
                     Available Kitchen Appliances for Cooking: {$data['question3']}\n
                     Preferred Time(mins): {$data['question4']}\n
-                    Cooking Skill Level: {$data['question5']}";
+                    Cooking Skill Level: {$data['question5']}
+                    Recipe Idea/Remarks: {$data['question6']}";
         $response = $input
             ->systemMessage('You are a text to recipe generator. You will generate the following things accordingly: 
                             detailed but short steps, ingredients used, estimated completion time, estimated calorie. 
@@ -56,6 +58,7 @@ class openaiController extends Controller
             'question3' => $data['question3'],
             'question4' => $data['question4'],
             'question5' => $data['question5'],
+            'question6' => $data['question6'],
         ]);
 
         return view('generatedRecipe', [
@@ -70,13 +73,14 @@ class openaiController extends Controller
     public function showRecipeGenerator(Request $request)
     {
         // session()->forget(['question1', 'question2', 'question3', 'question4', 'question5', 'image_url']);
-        session()->forget(['question1', 'question2', 'question3', 'question4', 'question5']);
+        session()->forget(['question1', 'question2', 'question3', 'question4', 'question5', 'question6']);
         return view('recipeGenerator', [
             'question1' => session('question1', ''),
             'question2' => session('question2', ''),
             'question3' => session('question3', ''),
             'question4' => session('question4', ''),
             'question5' => session('question5', ''),
+            'question6' => session('question6', ''),
             'isEditing' => $request->input('isEditing', false)
         ]);
     }
@@ -92,6 +96,7 @@ class openaiController extends Controller
             'question3' => $input->question3,
             'question4' => $input->question4,
             'question5' => $input->question5,
+            'question6' => $input->question6,
             'isEditing' => true
         ]);
     }

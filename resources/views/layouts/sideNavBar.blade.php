@@ -41,11 +41,11 @@
             <h4><span>General</span></h4>
             <div class="menu-separator"></div>
 
-            {{-- <li>
-                <a href="{{ route('mealplan') }}"><span class="material-symbols-outlined">
-                        calendar_month
-                    </span>Meal Planner</a>
-            </li> --}}
+            <li>
+                <a href="{{ route('body.fat.calculator') }}"><span class="material-symbols-outlined">
+                        body_fat
+                    </span>Calculate Fat %</a>
+            </li>
             <li>
                 <a href="{{ route('cookbooks') }}"><span class="material-symbols-outlined">
                         menu_book
