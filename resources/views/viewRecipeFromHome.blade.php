@@ -17,6 +17,7 @@
     @include('layouts.sideNavBar')
     <div class="main-content">
         <div class="content-container">
+            @include('layouts.sessionMessage')
             <div class="row align-items-center">
                 {{-- Recipe Image --}}
                 <div class="col-md-6">
@@ -69,6 +70,13 @@
             </div>
             {{-- END - recipe details --}}
 
+            {{-- Save Recipe Button --}}
+            <form action="{{ route('home.saveRecipeFromHome', $recipe->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-warning" style="border-radius: 15px; margin-right: 15px;">
+                    <span class="material-symbols-outlined">bookmark_add</span> Save Recipe
+                </button>
+            </form>
             <a href="{{ url()->previous() }}" class="btn btn-secondary" style="border-radius: 15px">
                 Back
             </a>
