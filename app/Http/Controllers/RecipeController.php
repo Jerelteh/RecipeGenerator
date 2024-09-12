@@ -24,7 +24,10 @@ class RecipeController extends Controller
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
         $recipe->calories = $data['calories'];
-
+        // Check if 'image' is set and decode it before saving
+        // if (!empty($data['image'])) {
+        //     $recipe->image = base64_decode($data['image']); // Decode the base64 string to binary
+        // }
         if (!empty($data['image'])) {
             $recipe->image = $data['image'];
         }
@@ -38,7 +41,6 @@ class RecipeController extends Controller
             'question3' => session('question3'),
             'question4' => session('question4'),
             'question5' => session('question5'),
-            'question6' => session('question6'),
         ]);
         // clear session values after saving recipe
         $this->clearRecipeSession();
@@ -68,7 +70,6 @@ class RecipeController extends Controller
             'question3' => session('question3'),
             'question4' => session('question4'),
             'question5' => session('question5'),
-            'question6' => session('question6'),
         ]);
 
         $this->clearRecipeSession();
@@ -219,6 +220,6 @@ class RecipeController extends Controller
     }
     private function clearRecipeSession() // clears session values
     {
-        session()->forget(['question1', 'question2', 'question3', 'question4', 'question5', 'question6', 'image_url']);
+        session()->forget(['question1', 'question2', 'question3', 'question4', 'question5', 'image_url']);
     }
 }
