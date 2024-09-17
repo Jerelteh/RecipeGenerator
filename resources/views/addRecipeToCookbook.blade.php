@@ -14,52 +14,54 @@
     @include('layouts.sideNavBar')
     <div class="main-content">
         <h1>Add recipes to {{ $cookbook->title }}</h1>
+        <div class="content-container">
+            @if ($userRecipes->isEmpty() && $savedRecipes->isEmpty())
+                <p>No Created/Saved Recipes</p>
+            @else
+                <form action="{{ route('cookbooks.addRecipe', ['cookbook' => $cookbook->id]) }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="recipes">Select your Generated Recipe</label>
+                        <select name="recipe_ids[]" id="recipes" class="form-control" multiple>
+                            {{-- Display user-created recipes --}}
+                            @if ($userRecipes->isEmpty())
+                                <p>No Created Recipes</p>
+                            @else
+                                <optgroup label="Generated Recipes">
+                                    @foreach ($userRecipes as $recipe)
+                                        <option value="{{ $recipe->id }}">
+                                            {{ $recipe->title }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
+                        </select>
+                    </div>
 
-        @if ($userRecipes->isEmpty() && $savedRecipes->isEmpty())
-            <p>No Created/Saved Recipes</p>
-        @else
-            <form action="{{ route('cookbooks.addRecipe', ['cookbook' => $cookbook->id]) }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="recipes">Select your Generated Recipe</label>
-                    <select name="recipe_ids[]" id="recipes" class="form-control" multiple>
-                        {{-- Display user-created recipes --}}
-                        @if ($userRecipes->isEmpty())
-                            <p>No Created Recipes</p>
-                        @else
-                            <optgroup label="Generated Recipes">
-                                @foreach ($userRecipes as $recipe)
-                                    <option value="{{ $recipe->id }}">
-                                        {{ $recipe->title }}
-                                    </option>
-                                @endforeach
-                            </optgroup>
-                        @endif
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="savedRecipes">Select your Saved Recipe</label>
+                        <select name="recipe_ids[]" id="savedRecipes" class="form-control" multiple>
+                            <!-- Display saved recipes -->
+                            @if ($savedRecipes->isEmpty())
+                                <p>No Saved Recipes</p>
+                            @else
+                                <optgroup label="Saved Recipes">
+                                    @foreach ($savedRecipes as $savedRecipe)
+                                        <option value="{{ $savedRecipe->id }}">
+                                            {{ $savedRecipe->title }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Selected Recipes</button>
+                </form>
+            @endif
 
-                <div class="form-group">
-                    <label for="savedRecipes">Select your Saved Recipe</label>
-                    <select name="recipe_ids[]" id="savedRecipes" class="form-control" multiple>
-                        <!-- Display saved recipes -->
-                        @if ($savedRecipes->isEmpty())
-                            <p>No Saved Recipes</p>
-                        @else
-                            <optgroup label="Saved Recipes">
-                                @foreach ($savedRecipes as $savedRecipe)
-                                    <option value="{{ $savedRecipe->id }}">
-                                        {{ $savedRecipe->title }}
-                                    </option>
-                                @endforeach
-                            </optgroup>
-                        @endif
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Add Selected Recipes</button>
-            </form>
-        @endif
+            <a href="{{ route('cookbooks.view', $cookbook->id) }}" class="btn btn-secondary mt-3">Back to Cookbook</a>
+        </div>
 
-        <a href="{{ route('cookbooks.view', $cookbook->id) }}" class="btn btn-secondary mt-3">Back to Cookbook</a>
     </div>
 </body>
 

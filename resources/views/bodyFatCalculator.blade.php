@@ -13,9 +13,14 @@
     @include('layouts.sideNavBar')
 
     <div class="main-content">
+        <h1>Body Fat Percentage Calculator</h1>
+        @include('layouts.sessionMessage')
+
         <div class="content-container">
-            <h1>Body Fat Calculator</h1>
-            @include('layouts.sessionMessage')
+            <div class="content-header">
+                {{-- <h2>Please enter your body measurements</h2> --}}
+            </div>
+
             <form action="{{ route('body.fat.calculate') }}" method="POST">
                 @csrf
 

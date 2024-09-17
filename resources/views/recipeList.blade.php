@@ -18,7 +18,7 @@
         <h1>Your Recipes</h1>
         @include('layouts.sessionMessage')
 
-        <div class="content-container">
+        <div class="content-container mb-5">
             <div class="content-header">
                 <h2>Created Recipes</h2>
             </div>
@@ -26,36 +26,49 @@
             @if ($userRecipes->isEmpty())
                 <p>No Saved Recipes</p>
             @else
-                <ul>
+                <ul style="list-style-type: none">
                     @foreach ($userRecipes as $userRecipe)
                         <li>
-                            <div>
-                                <a
-                                    href="{{ route('view.recipe', ['id' => $userRecipe->id]) }}">{{ $userRecipe->title }}</a>
-                                <span class="badge badge-pill badge-secondary">{{ $userRecipe->calories }} kcal</span>
+                            <div class="card my-3">
+                                <div class="card-body">
+                                    <a href="{{ route('view.recipe', ['id' => $userRecipe->id]) }}"
+                                        style="text-decoration: none; color:black">
+                                        <section class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                {{ $userRecipe->title }}
+                                                <span
+                                                    class="badge badge-pill badge-secondary">{{ $userRecipe->calories }}
+                                                    kcal</span>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <form
+                                                    action="{{ route('recipe.generator.from.list', ['id' => $userRecipe->id]) }}"
+                                                    method="GET">
+                                                    @csrf
+                                                    <input type="hidden" name="isEditing" value="1">
+                                                    <button type="submit"
+                                                        class="btn btn-success mr-3 d-flex justify-content-center align-items-center">
+                                                        <span class="material-symbols-outlined">
+                                                            autorenew
+                                                        </span>
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('delete.recipe', ['id' => $userRecipe->id]) }}"
+                                                    method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="btn btn-danger d-flex justify-content-center align-items-center">
+                                                        <span class="material-symbols-outlined">
+                                                            delete
+                                                        </span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </section>
+                                    </a>
+                                </div>
                             </div>
-
-                            <form action="{{ route('recipe.generator.from.list', ['id' => $userRecipe->id]) }}"
-                                method="GET">
-                                @csrf
-                                <input type="hidden" name="isEditing" value="1">
-                                <button type="submit" class="btn btn-success">
-                                    <span class="material-symbols-outlined">
-                                        autorenew
-                                    </span>
-                                    {{-- <div>Regenerate</div> --}}
-                                </button>
-                            </form>
-                            <form action="{{ route('delete.recipe', ['id' => $userRecipe->id]) }}" method="POST"
-                                style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">
-                                    <span class="material-symbols-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </form>
                         </li>
                     @endforeach
                 </ul>
@@ -74,25 +87,36 @@
             @if ($savedRecipes->isEmpty())
                 <p>No Saved Recipes</p>
             @else
-                <ul>
+                <ul style="list-style-type: none">
                     @foreach ($savedRecipes as $savedRecipe)
                         <li>
-                            <div>
-                                <a href="{{ route('view.recipe', ['id' => $savedRecipe->recipe->id]) }}">
-                                    {{ $savedRecipe->recipe->title }}
-                                </a>
-                                <span class="badge badge-pill badge-secondary">{{ $savedRecipe->recipe->calories }}
-                                    kcal</span>
+                            <div class="card my-3">
+                                <div class="card-body">
+                                    <a href="{{ route('view.recipe', ['id' => $savedRecipe->recipe->id]) }}"
+                                        style="text-decoration: none; color:black">
+                                        <section class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                {{ $savedRecipe->recipe->title }}
+                                                <span
+                                                    class="badge badge-pill badge-secondary">{{ $savedRecipe->recipe->calories }}
+                                                    kcal</span>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <form
+                                                    action="{{ route('delete.saved.recipe', ['id' => $savedRecipe->id]) }}"
+                                                    method="POST" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="btn btn-danger mr-3 d-flex justify-content-center align-items-center">
+                                                        <span class="material-symbols-outlined">delete</span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </section>
+                                    </a>
+                                </div>
                             </div>
-
-                            <form action="{{ route('delete.saved.recipe', ['id' => $savedRecipe->id]) }}" method="POST"
-                                style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">
-                                    <span class="material-symbols-outlined">delete</span>
-                                </button>
-                            </form>
                         </li>
                     @endforeach
                 </ul>

@@ -14,8 +14,11 @@
     @include('layouts.sideNavBar')
 
     <div class="main-content">
+        <h1>Account Analytics</h1>
         <div class="content-container">
-            <h1>Recipe Generation Analytics</h1>
+            <div class="content-header">
+                {{-- <h2>Recipe Generation Count</h2> --}}
+            </div>
             <div class="container" style="padding-top: 20px">
                 <!-- Month Selector -->
                 <form action="{{ route('analytics') }}" method="GET" class="form-inline mb-4">

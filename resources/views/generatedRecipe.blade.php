@@ -30,7 +30,11 @@
             </div>
 
             {{-- START - Generated Recipe Output --}}
-            <span class="recipe-title">{{ $recipeTitle }}</span>
+            <span class="recipe-title">
+                <h1>
+                    {{ $recipeTitle }}
+                </h1>
+            </span>
             <div class="recipe-details">
                 <div>
                     {!! nl2br($recipeBody) !!}

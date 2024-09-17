@@ -35,14 +35,17 @@
 
             {{-- START - recipe details --}}
             <!-- Recipe Title -->
-            <span class="recipe-title">{{ $recipeTitle }}
-                <!-- Share Button -->
-                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#shareModal"
-                    style="border-radius: 15px; padding-top: 13px;">
-                    <span class="material-symbols-outlined">
-                        share
-                    </span>
-                </button>
+            <span class="recipe-title">
+                <h1>
+                    {{ $recipeTitle }}
+                    <!-- Share Button -->
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#shareModal"
+                        style="border-radius: 15px; padding-top: 13px;">
+                        <span class="material-symbols-outlined">
+                            share
+                        </span>
+                    </button>
+                </h1>
             </span>
 
             <!-- Include the Share Modal -->

@@ -29,8 +29,9 @@
 <body>
     @include('layouts.sideNavBar')
     <div class="main-content">
+        <h1>Generate Recipe</h1>
+
         <div class="content-container">
-            <h1>Generate Recipe</h1>
             <form id="recipeForm" action="{{ route('submit.input') }}" method="POST">
                 @csrf
                 @if (isset($recipeID))

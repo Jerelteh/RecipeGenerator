@@ -66,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cookbooks', [CookbookController::class, 'listCookbooks'])->name('cookbooks');
     Route::get('/cookbooks/create', [CookbookController::class, 'createCookbook'])->name('cookbooks.create');
     Route::post('/cookbookSubmit', [CookbookController::class, 'saveCookbook'])->name('cookbooks.save');
+    Route::delete('/cookbooks/{cookbook}', [CookbookController::class, 'deleteCookbook'])->name('cookbooks.delete');
 
     // View Cookbook details
     Route::get('/cookbooks/{cookbook}', [CookbookController::class, 'viewCookbook'])->name('cookbooks.view');
