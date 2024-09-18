@@ -95,13 +95,11 @@
             </div>
             {{-- END - recipe details --}}
 
-            <button type="button" class="btn btn-secondary" onclick="{{ route('recipe.list') }}"
-                style="border-radius: 15px">Back
-            </button>
-            <button type="button" class="btn btn-warning" onclick="{{ route('edit.recipe', ['id' => $recipeID]) }}"
+            <a class="btn btn-secondary" href="{{ route('recipe.list') }}" style="border-radius: 15px">Back</a>
+            <a class="btn btn-warning" href="{{ route('edit.recipe', ['id' => $recipeID]) }}"
                 style="border-radius: 15px">
-                <a href="" style="color: white">Edit Recipe</a>
-            </button>
+                Edit Recipe
+            </a>
 
             {{-- tags button modal --}}
             <div class="modal fade" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="tagModalLabel"

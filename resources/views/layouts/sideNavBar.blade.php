@@ -73,7 +73,7 @@
             </li>
             <li>
                 <a href="{{ route('logout') }}"
-                    onclick="event.preventdefault(); document.getElementById('logout-form').submit();">
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <span class="material-symbols-outlined">
                         logout
                     </span>Logout

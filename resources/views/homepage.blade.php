@@ -12,6 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
     <link rel="stylesheet" href="{{ asset('css/generateRecipeBtn.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tooltip.css') }}">
 </head>
 
 <body>
@@ -46,6 +47,20 @@
                 </a>
             </div>
 
+
+            <!-- Prompt -->
+            <div class="form-group">
+                <small class="d-flex align-items-center my-2">
+                    Search recipes by tag
+                    <span class="info-icon">
+                        <span class="material-symbols-outlined">info</span>
+                        <div class="tooltip fade">
+                            Selecting either of these cards will search for recipes tagged with the selected card's
+                            labelled tag
+                        </div>
+                    </span>
+                </small>
+            </div>
             <!-- Category Cards -->
             <div class="card-container">
                 @foreach ($categories as $category)
@@ -56,7 +71,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ $category->name }}</h5>
                                 <div class="card-overlay">
-                                    <div class="card-overlay-text">View Recipe</div>
+                                    <div class="card-overlay-text">View Recipes</div>
                                 </div>
                             </div>
                         </a>
@@ -76,7 +91,7 @@
             </div>
 
 
-            <div>
+            {{-- <div>
                 <h2>Food Recipes</h2>
 
                 <div>
@@ -90,15 +105,7 @@
                                     <span class="badge badge-pill badge-secondary">{{ $recipe->calories }} kcal</span>
                                 </div>
 
-                                {{-- Save to Cookbook button --}}
-                                {{-- <div class="btn-group">
-                            <button type="button" class="btn btn-warning" data-toggle="modal"
-                                style="border-radius: 20px; text-align: center; position: relative;"
-                                data-target="#saveRecipeModal{{ $recipe->id }}">+
-                            </button>
-                        </div> --}}
-
-                                {{-- Save to Saved Recipes button --}}
+                                <!-- Save to Saved Recipes button -->
                                 @include('partials.saveToSavedRecipesButton')
                             </li>
 
@@ -141,7 +148,7 @@
                         @endforeach
                     </ul>
                 </div>
-            </div>
+            </div>  --}}
 
         </div>
 

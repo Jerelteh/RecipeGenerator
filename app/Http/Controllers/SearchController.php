@@ -17,7 +17,7 @@ class SearchController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
-        $recipes = Recipe::where('title', 'like', "%{$query}%")->get();
+        $recipes = Recipe::where('title', 'like', "%{$query}%")->paginate(10);
         return view('searchResults', compact('recipes', 'query'));
     }
 }

@@ -120,13 +120,11 @@ class RecipeController extends Controller
         $data = $request->validate([
             'title' => 'required|string',
             'content' => 'required|string',
-            'calories' => 'required|integer',
         ]);
 
         $recipe = Recipe::findOrFail($recipeID);
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
-        $recipe->calories = $data['calories'];
         $recipe->save();
 
         return redirect()->route('view.recipe', ['id' => $recipe->id])->with('success', 'Recipe updated successfully!');

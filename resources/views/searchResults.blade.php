@@ -38,8 +38,10 @@
                 @foreach ($recipes as $recipe)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
-                            <a
-                                href="{{ route('view.recipe.from.home', ['id' => $recipe->id]) }}">{{ $recipe->title }}</a>
+                            <a href="{{ route('view.recipe.from.home', ['id' => $recipe->id]) }}"
+                                style="text-decoration: none; color:black">
+                                {{ $recipe->title }}
+                            </a>
                             <span class="badge badge-pill badge-secondary">{{ $recipe->calories }} kcal</span>
                         </div>
                         {{-- Save to Saved Recipes button --}}
@@ -47,6 +49,11 @@
                     </li>
                 @endforeach
             </ul>
+
+            {{-- Pagination Links --}}
+            <div class="d-flex justify-content-center mt-4">
+                {{ $recipes->appends(request()->query())->links() }}
+            </div>
         @endif
     </div>
 
