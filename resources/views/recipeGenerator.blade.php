@@ -8,7 +8,9 @@
     <title>Recipe Generator</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="{{ asset('css/tooltip.css') }}">
     <style>
         .selectable {
             display: inline-block;
@@ -41,14 +43,25 @@
                     <input type="hidden" name="isEditing" value="1">
                 @endif
                 <div class="form-group">
-                    <label for="question1">1. What ingredients do you have on hand? (max 200 characters)</label>
+                    <label for="question1">
+                        1. What ingredients do you have on hand? (max 200 characters)
+                    </label>
                     <div id="question1">
                         <input type="text" class="form-control" id="question1" name="question1"
                             placeholder="e.g. rice, egg, fish etc." value="{{ $question1 }}" maxlength="200"><br>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="question2">2. Food Preparation Appliances:</label>
+                    <label for="question2">
+                        2. Available Food Preparation Appliances:
+                        <span class="info-icon">
+                            <span class="material-symbols-outlined">info</span>
+                            <div class="tooltip fade">
+                                Select the available appliances you have, leaving blank will allow the system to decide
+                                for you
+                            </div>
+                        </span>
+                    </label>
                     <div id="question2">
                         @foreach (['Blender', 'Food Processor', 'Juicer', 'Coffee Grinder', 'Mortar and Pestle'] as $appliance)
                             <div class="selectable {{ in_array($appliance, explode(', ', $question2)) ? 'selected' : '' }}"
@@ -60,7 +73,16 @@
                     <input type="hidden" id="question2_input" name="question2" value="{{ $question2 }}"><br>
                 </div>
                 <div class="form-group">
-                    <label for="question3">3. Kitchen Appliances for Cooking:</label>
+                    <label for="question3">
+                        3. Available Kitchen Appliances for Cooking:
+                        <span class="info-icon">
+                            <span class="material-symbols-outlined">info</span>
+                            <div class="tooltip fade">
+                                Select the available appliances you have, leaving blank will allow the system to decide
+                                for you
+                            </div>
+                        </span>
+                    </label>
                     <div id="question3">
                         @foreach (['Stove Top', 'Oven', 'Microwave', 'Grill', 'Air Fryer', 'Food Steamer', 'Pressure Cooker', 'Slow Cooker', 'Rice Cooker'] as $appliance)
                             <div class="selectable {{ in_array($appliance, explode(', ', $question3)) ? 'selected' : '' }}"
@@ -72,7 +94,16 @@
                     <input type="hidden" id="question3_input" name="question3" value="{{ $question3 }}"><br>
                 </div>
                 <div class="form-group">
-                    <label for="question4">4. How much time do you have for cooking (in mins)?</label>
+                    <label for="question4">
+                        4. How much time do you have for cooking (in mins)?
+                        <span class="info-icon">
+                            <span class="material-symbols-outlined">info</span>
+                            <div class="tooltip fade">
+                                The total time you can allocate to prepare the food, leaving blank will allow the system
+                                to decide for you
+                            </div>
+                        </span>
+                    </label>
                     <div class="col-xs-2">
                         <input type="number" class="form-control" id="question4" name="question4"
                             value="{{ $question4 }}" max="1440" min="5"
@@ -81,7 +112,15 @@
 
                 </div>
                 <div class="form-group">
-                    <label for="question5">5. Level of Cooking Skill:</label>
+                    <label for="question5">
+                        5. Level of Cooking Skill:
+                        <span class="info-icon">
+                            <span class="material-symbols-outlined">info</span>
+                            <div class="tooltip fade">
+                                The preferred difficulty level for the recipe
+                            </div>
+                        </span>
+                    </label>
                     <div id="question5">
                         @foreach (['Easy', 'Normal', 'Advanced'] as $level)
                             <div class="selectable {{ $level === $question5 ? 'selected' : '' }}"
