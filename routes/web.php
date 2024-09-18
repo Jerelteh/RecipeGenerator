@@ -9,6 +9,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SortController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\BodyFatController;
+use App\Http\Controllers\StatsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\Cookbook;
 use Illuminate\Support\Facades\Route;
@@ -25,9 +26,7 @@ Route::get('/sideNavBar', function () {
 
 //////////////////////////////////////////////////////////////////////////////////
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [StatsController::class, 'getUserStats'])->middleware(['auth'])->name('dashboard');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 Route::get('/homepage', [HomeController::class, 'homepage'])->name('homepage');

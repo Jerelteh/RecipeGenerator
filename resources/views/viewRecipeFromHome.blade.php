@@ -30,7 +30,7 @@
             <!-- Recipe Title -->
             <span class="recipe-title">
                 <h1>
-                    {{ $recipeTitle }}
+                    {{ $recipe->title }}
                     <!-- Share Button -->
                     <button type="button" class="btn btn-light" data-toggle="modal" data-target="#shareModal"
                         style="border-radius: 15px; padding-top: 13px;">

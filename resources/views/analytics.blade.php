@@ -14,7 +14,7 @@
     @include('layouts.sideNavBar')
 
     <div class="main-content">
-        <h1>Account Analytics</h1>
+        <h1>Usage Analytics</h1>
         <div class="content-container">
             <div class="content-header">
                 {{-- <h2>Recipe Generation Count</h2> --}}
