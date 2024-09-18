@@ -104,3 +104,7 @@ Route::get('/analytics', [AnalyticsController::class, 'showAnalytics'])->name('a
 Route::get('/body-fat-calculator', [BodyFatController::class, 'showCalculator'])->name('body.fat.calculator');
 Route::post('/body-fat-calculator', [BodyFatController::class, 'calculateBodyFat'])->name('body.fat.calculate');
 // BodyFat __END__
+
+// PDF __START__
+Route::get('/recipe/{id}/download-pdf', [RecipeController::class, 'downloadRecipePDF'])->name('download.recipe.pdf');
+// PDF __END__

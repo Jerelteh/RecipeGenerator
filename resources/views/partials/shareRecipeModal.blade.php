@@ -40,6 +40,12 @@
                         </button>
                     </div>
                 </div>
+                <!-- New PDF download button -->
+                <div class="mt-3">
+                    <a href="{{ route('download.recipe.pdf', ['id' => $recipeID]) }}" class="btn btn-primary">
+                        Download as PDF
+                    </a>
+                </div>
             </div>
         </div>
     </div>

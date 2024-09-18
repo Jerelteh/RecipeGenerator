@@ -7,6 +7,7 @@ use App\Models\Tag;
 use App\Models\SavedRecipe;
 use App\Models\RecipeInput;
 use Illuminate\Http\Request;
+use Mpdf\Mpdf;
 use Illuminate\Support\Facades\Auth;
 
 class RecipeController extends Controller
@@ -215,6 +216,22 @@ class RecipeController extends Controller
         $recipe = Recipe::findOrFail($recipeID);
         $recipe->tags()->detach($tagID);
         return redirect()->route('view.recipe', ['id' => $recipeID])->with('success', 'Tag removed successfully!');
+    }
+    public function downloadRecipePDF($id)
+    {
+        // Fetch the recipe data
+        $recipe = Recipe::findOrFail($id);
+        $tags = $recipe->tags;
+
+        // Prepare the data for the PDF
+        $html = view('pdf.recipePDF', compact('recipe', 'tags'))->render();
+
+        // Initialize mPDF and create the PDF
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($html);
+
+        // Output the PDF for download
+        return $mpdf->Output("{$recipe->title}.pdf", 'D'); // 'D' forces download
     }
     private function clearRecipeSession() // clears session values
     {

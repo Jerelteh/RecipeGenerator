@@ -52,21 +52,25 @@ class HomeController extends Controller
             'cookbooks' => $cookbooks,
         ]);
     }
-    public function viewRecipe($recipeID)
-    {
-        $recipe = Recipe::findOrFail($recipeID);
-        return view('viewRecipeFromHome', [
-            'recipeTitle' => $recipe->title,
-            'recipeBody' => $recipe->content,
-            'recipeID' => $recipe->id
-        ]);
-    }
+    // public function viewRecipe($recipeID)
+    // {
+    //     $recipe = Recipe::findOrFail($recipeID);
+    //     return view('viewRecipeFromHome', [
+    //         'recipeTitle' => $recipe->title,
+    //         'recipeBody' => $recipe->content,
+    //         'recipeID' => $recipe->id
+    //     ]);
+    // }
     public function viewRecipeFromHome($id)
     {
         $recipe = Recipe::findOrFail($id);
         $tags = $recipe->tags;
         return view('viewRecipeFromHome', [
-            'recipe' => $recipe,
+            'recipeBody' => $recipe->content,
+            'recipeTitle' => $recipe->title,
+            'calories' => $recipe->calories,
+            'image' => $recipe->image,
+            'recipeID' => $recipe->id,
             'tags' => $tags,
             'allTags' => Tag::all()->pluck('name', 'id'),
         ]);
