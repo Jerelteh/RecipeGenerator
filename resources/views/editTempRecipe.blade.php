@@ -26,7 +26,7 @@
                     </div>
                     <div>
                         <label for="content">Recipe Content:</label>
-                        <textarea id="content" name="content" rows="10" required>{{ $content }}</textarea>
+                        <textarea id="content" name="content" rows="10" cols="80" required>{{ $content }}</textarea>
                     </div>
                     <input type="hidden" name="recipeID" value="{{ $recipeID }}">
                     <input type="hidden" name="isEditing" value="{{ $isEditing }}">

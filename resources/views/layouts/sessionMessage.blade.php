@@ -12,6 +12,10 @@
         <div class="alert alert-warning" style="border-radius: 10px">
             {{ session('warning') }}
         </div>
+    @elseif (session('alert'))
+        <div class="alert alert-warning" style="border-radius: 10px">
+            {{ session('alert') }}
+        </div>
     @elseif (session('status'))
         <div class="alert alert-info" style="border-radius: 10px">
             {{ session('status') }}

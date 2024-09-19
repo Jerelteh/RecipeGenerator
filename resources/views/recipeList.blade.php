@@ -92,7 +92,7 @@
                         <li>
                             <div class="card my-3">
                                 <div class="card-body">
-                                    <a href="{{ route('view.recipe', ['id' => $savedRecipe->recipe->id]) }}"
+                                    <a href="{{ route('view.recipe.from.home', ['id' => $savedRecipe->recipe->id]) }}"
                                         style="text-decoration: none; color:black">
                                         <section class="d-flex justify-content-between align-items-center">
                                             <div>

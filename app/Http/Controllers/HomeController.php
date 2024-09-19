@@ -80,18 +80,29 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
-        // Check if the recipe already exists in the saved recipes
+        // Check if the recipe belongs to the user in recipes table
+        $recipe = Recipe::where('id', $recipe_id)
+            ->where('user_id', $user->id)
+            ->first();
+        if ($recipe) {
+            // Recipe already belongs to the user
+            return redirect()->back()->with('alert', 'This recipe was created by you, it is already saved in your recipe libraries.');
+        }
+
+        // Check if the recipe exists in the saved recipes
         $savedRecipe = SavedRecipe::where('user_id', $user->id)
             ->where('recipe_id', $recipe_id)
             ->first();
-
-        if (!$savedRecipe) {
-            SavedRecipe::create([
-                'user_id' => $user->id,
-                'recipe_id' => $recipe_id,
-            ]);
-            return redirect()->back()->with('success', 'Recipe has been added to your saved recipes.');
+        if ($savedRecipe) {
+            // Recipe already exists in saved_recipes
+            return redirect()->back()->with('status', 'Recipe is already in your saved recipes.');
         }
-        return redirect()->back()->with('status', 'Recipe is already in your saved recipes.');
+
+        // Save recipe to saved_recipes
+        SavedRecipe::create([
+            'user_id' => $user->id,
+            'recipe_id' => $recipe_id,
+        ]);
+        return redirect()->back()->with('success', 'Recipe has been added to your saved recipes.');
     }
 }
