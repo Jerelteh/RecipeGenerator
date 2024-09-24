@@ -7,6 +7,7 @@ use App\Models\Tag;
 use App\Models\SavedRecipe;
 use App\Models\RecipeInput;
 use Illuminate\Http\Request;
+use Mpdf\Mpdf;
 use Illuminate\Support\Facades\Auth;
 
 class RecipeController extends Controller
@@ -17,14 +18,20 @@ class RecipeController extends Controller
             'title' => 'required|string',
             'content' => 'required|string',
             'calories' => 'required|integer',
-            'image_url' => 'nullable|string',
+            'image' => 'nullable|string',
         ]);
 
         $recipe = new Recipe();
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
         $recipe->calories = $data['calories'];
-        $recipe->image_url = session('image_url');
+        // Check if 'image' is set and decode it before saving
+        // if (!empty($data['image'])) {
+        //     $recipe->image = base64_decode($data['image']); // Decode the base64 string to binary
+        // }
+        if (!empty($data['image'])) {
+            $recipe->image = $data['image'];
+        }
         $recipe->user_id = Auth::id(); // associate with logged-in user
         $recipe->save();
 
@@ -47,14 +54,14 @@ class RecipeController extends Controller
             'title' => 'required|string',
             'content' => 'required|string',
             'calories' => 'required|integer',
-            'image_url' => 'nullable|string',
+            'image' => 'nullable|string',
         ]);
 
         $recipe = Recipe::findOrFail($recipeID);
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
         $recipe->calories = $data['calories'];
-        $recipe->image_url = $data['image_url'];
+        $recipe->image = $data['image'];
         $recipe->save();
 
         $recipeInput = RecipeInput::where('recipe_id', $recipe->id)->first();
@@ -85,7 +92,7 @@ class RecipeController extends Controller
             'recipeBody' => $recipe->content,
             'recipeTitle' => $recipe->title,
             'calories' => $recipe->calories,
-            'imageUrl' => $recipe->image_url,
+            'image' => $recipe->image,
             'recipeID' => $recipe->id,
             'tags' => $tags, // pass the collection of tag objects
             'allTags' => Tag::all()->pluck('name', 'id'), // fetch all available tags
@@ -114,13 +121,11 @@ class RecipeController extends Controller
         $data = $request->validate([
             'title' => 'required|string',
             'content' => 'required|string',
-            'calories' => 'required|integer',
         ]);
 
         $recipe = Recipe::findOrFail($recipeID);
         $recipe->title = $data['title'];
         $recipe->content = $data['content'];
-        $recipe->calories = $data['calories'];
         $recipe->save();
 
         return redirect()->route('view.recipe', ['id' => $recipe->id])->with('success', 'Recipe updated successfully!');
@@ -193,11 +198,40 @@ class RecipeController extends Controller
         return redirect()->route('view.recipe', ['id' => $recipeID])
             ->with('success', 'Tag added successfully!');
     }
+    public function recipesByTag($tag)
+    {
+        // Fetch the tag by its ID or name
+        $tag = Tag::where('id', $tag)->orWhere('name', $tag)->firstOrFail();
+
+        // Fetch recipes that have the selected tag
+        $recipes = $tag->recipes()->paginate(10);
+
+        return view('recipesByTag', [
+            'recipes' => $recipes,
+            'tag' => $tag,
+        ]);
+    }
     public function removeTag(Request $request, $recipeID, $tagID)
     {
         $recipe = Recipe::findOrFail($recipeID);
         $recipe->tags()->detach($tagID);
         return redirect()->route('view.recipe', ['id' => $recipeID])->with('success', 'Tag removed successfully!');
+    }
+    public function downloadRecipePDF($id)
+    {
+        // Fetch the recipe data
+        $recipe = Recipe::findOrFail($id);
+        $tags = $recipe->tags;
+
+        // Prepare the data for the PDF
+        $html = view('pdf.recipePDF', compact('recipe', 'tags'))->render();
+
+        // Initialize mPDF and create the PDF
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($html);
+
+        // Output the PDF for download
+        return $mpdf->Output("{$recipe->title}.pdf", 'D'); // 'D' forces download
     }
     private function clearRecipeSession() // clears session values
     {

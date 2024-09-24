@@ -32,7 +32,16 @@ class CookbookController extends Controller
         ]);
         return redirect()->route('cookbooks')->with('success', 'Cookbook created successfully.');
     }
+    public function deleteCookbook(Cookbook $cookbook)
+    {
+        if ($cookbook->user_id !== Auth::id()) {
+            abort(403);
+        }
 
+        $cookbook->delete();
+
+        return redirect()->route('cookbooks')->with('success', 'Cookbook deleted successfully.');
+    }
     public function viewCookbook(Cookbook $cookbook)
     {
         if ($cookbook->user_id !== Auth::id()) {

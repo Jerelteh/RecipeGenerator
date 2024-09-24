@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Style+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Style+Script&display=swap');
+@import url('https://fonts.cdnfonts.com/css/sergio-trendy-regular');
+@import url('https://fonts.googleapis.com/css2?family=Corben:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Corben&family=Nerko+One&display=swap');
 
 * {
     margin: 0;
@@ -11,7 +14,7 @@
 
 body {
     min-height: 100vh;
-    background: #d2d2d2;
+    background: #f1e6bf;
 }
 
 .sidebar {
@@ -23,7 +26,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    background: #b96246;
+    background: #42459E;
     padding: 25px 20px;
     transition: all 0.4s ease;
 }
@@ -50,7 +53,7 @@ body {
     font-weight: 600;
     color: #fdd600;
     margin-left: 75px;
-    margin-top: -66px;
+    margin-top: -55px;
 }
 
 .sidebar-links {
@@ -188,9 +191,12 @@ body {
 }
 
 .main-content h1 {
+    font-family: 'Nerko One', cursive;
+    font-weight: 400;
+    font-style: normal;
     margin-top: 30px;
     margin-bottom: 30px;
-    font-size: 60px;
+    font-size: 100px;
 }
 
 .content-container {
@@ -225,4 +231,10 @@ body {
 
 .recipe-details {
     margin-top: 20px;
+}
+
+.display-calorie-badge {
+    display: flex;/* Flexbox for centering */
+    align-items: center;/* Center the icon vertically */
+    justify-content: center;/* Center the icon horizontally (if needed) */
 }

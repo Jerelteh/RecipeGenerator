@@ -42,9 +42,9 @@
             <div class="menu-separator"></div>
 
             <li>
-                <a href="{{ route('mealplan') }}"><span class="material-symbols-outlined">
-                        calendar_month
-                    </span>Meal Planner</a>
+                <a href="{{ route('body.fat.calculator') }}"><span class="material-symbols-outlined">
+                        body_fat
+                    </span>Calculate Fat %</a>
             </li>
             <li>
                 <a href="{{ route('cookbooks') }}"><span class="material-symbols-outlined">
@@ -67,13 +67,13 @@
                     </span>Profile</a>
             </li>
             <li>
-                <a href="#"><span class="material-symbols-outlined">
-                        settings
-                    </span>Settings</a>
+                <a href="{{ route('analytics') }}"><span class="material-symbols-outlined">
+                        analytics
+                    </span>Analytics</a>
             </li>
             <li>
                 <a href="{{ route('logout') }}"
-                    onclick="event.preventdefault(); document.getElementById('logout-form').submit();">
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <span class="material-symbols-outlined">
                         logout
                     </span>Logout

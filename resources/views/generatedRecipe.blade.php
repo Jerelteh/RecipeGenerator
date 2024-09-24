@@ -19,17 +19,22 @@
         <div class="content-container">
             <div class="row align-items-center">
                 {{-- Recipe Image --}}
-                @if (isset($imageUrl))
+                @if (isset($image))
                     <div class="col-md-6">
                         <div class="recipe-image">
-                            <img src="{{ $imageUrl }}" alt="Generated Image" class="img-fluid">
+                            <img src="data:image/jpeg;base64,{{ base64_encode($image) }}" alt="Generated Image"
+                                class="img-fluid">
                         </div>
                     </div>
                 @endif
             </div>
 
             {{-- START - Generated Recipe Output --}}
-            <span class="recipe-title">{{ $recipeTitle }}</span>
+            <span class="recipe-title">
+                <h1>
+                    {{ $recipeTitle }}
+                </h1>
+            </span>
             <div class="recipe-details">
                 <div>
                     {!! nl2br($recipeBody) !!}
@@ -51,7 +56,8 @@
                     <input type="hidden" name="title" value="{{ $recipeTitle }}">
                     <input type="hidden" name="content" value="{{ $recipeBody }}">
                     <input type="hidden" name="calories" value="{{ $calories }}">
-                    <button type="submit">Save Recipe</button>
+                    <input type="hidden" name="image" value="{{ base64_encode($image) }}">
+                    <button type="submit" class="btn btn-success">Save Recipe</button>
                 </form>
                 {{-- END - save recipe --}}
 
@@ -65,7 +71,7 @@
                     <input type="hidden" name="question5" value="{{ session('question5') }}">
                     <input type="hidden" name="recipeID" value="{{ $recipeID }}">
                     <input type="hidden" name="isEditing" value="{{ $isEditing }}">
-                    <button type="submit">Regenerate Recipe</button>
+                    <button type="submit" class="btn btn-warning">Regenerate Recipe</button>
                 </form>
                 {{-- END - Regenerate recipe --}}
 
@@ -77,7 +83,7 @@
                     <input type="hidden" name="calories" value="{{ $calories }}">
                     <input type="hidden" name="recipeID" value="{{ $recipeID }}">
                     <input type="hidden" name="isEditing" value="{{ $isEditing }}">
-                    <button type="submit">Edit Recipe</button>
+                    <button type="submit" class="btn btn-light">Edit Recipe</button>
                 </form>
                 {{-- END - To edit recipe --}}
 
@@ -88,6 +94,7 @@
                         <input type="hidden" name="title" value="{{ $recipeTitle }}">
                         <input type="hidden" name="content" value="{{ $recipeBody }}">
                         <input type="hidden" name="calories" value="{{ $calories }}">
+                        <input type="hidden" name="image" value="{{ base64_encode($image) }}">
                         <button type="submit">Overwrite Existing Recipe</button>
                     </form>
                 @endif

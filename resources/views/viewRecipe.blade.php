@@ -10,33 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <style>
-        .tag-btn {
-            position: relative;
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 15px;
-            background-color: #f8f8f8;
-            cursor: pointer;
-        }
-
-        .tag-btn:hover .remove-tag {
-            display: inline;
-        }
-
-        .remove-tag {
-            display: none;
-            position: absolute;
-            top: 0;
-            right: -10px;
-            font-weight: bold;
-            color: red;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/viewRecipeTags.css') }}">
 </head>
 
 <body>
@@ -49,13 +23,34 @@
                 {{-- Recipe Image --}}
                 <div class="col-md-6">
                     <div class="recipe-image">
-                        <img src="{{ $imageUrl }}" alt="Generated Image" class="img-fluid">
+                        @if ($image)
+                            <img src="data:image/jpeg;base64,{{ $image }}" alt="Generated Image"
+                                class="img-fluid">
+                        @else
+                            <p>No image available</p>
+                        @endif
                     </div>
                 </div>
             </div>
 
             {{-- START - recipe details --}}
-            <span class="recipe-title">{{ $recipeTitle }}</span>
+            <!-- Recipe Title -->
+            <span class="recipe-title">
+                <h1>
+                    {{ $recipeTitle }}
+                    <!-- Share Button -->
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#shareModal"
+                        style="border-radius: 15px; padding-top: 13px;">
+                        <span class="material-symbols-outlined">
+                            share
+                        </span>
+                    </button>
+                </h1>
+            </span>
+
+            <!-- Include the Share Modal -->
+            @include('partials.shareRecipeModal')
+
             <div class="recipe-details">
                 <!-- Display existing tags -->
                 <div class="mt-3">
@@ -79,7 +74,8 @@
                     </ul>
                 </div>
                 <!-- Button to trigger the Tag Modal -->
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tagModal">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tagModal"
+                    style="border-radius: 15px">
                     Add Tags
                 </button>
                 <div>
@@ -87,20 +83,23 @@
                 </div>
 
                 <div>
-                    <p><strong>Estimated Calories: </strong>
-                        <span class="badge badge-pill badge-secondary">
-                            {{ $calories }}
-                        </span>
-                    </p>
+                    <h4><strong>Estimated Calories: </strong>
+                        <div class="badge badge-pill badge-secondary">
+                            <div class="display-calorie-badge">
+                                {{ $calories }}
+                            </div>
+                        </div>
+                        kcal
+                    </h4>
                 </div>
             </div>
             {{-- END - recipe details --}}
 
-            <button type="button" class="btn btn-secondary" onclick="{{ route('recipe.list') }}">Back
-            </button>
-            <button type="button" class="btn btn-warning" onclick="{{ route('edit.recipe', ['id' => $recipeID]) }}">
-                <a href="" style="color: white">Edit Recipe</a>
-            </button>
+            <a class="btn btn-secondary" href="{{ route('recipe.list') }}" style="border-radius: 15px">Back</a>
+            <a class="btn btn-warning" href="{{ route('edit.recipe', ['id' => $recipeID]) }}"
+                style="border-radius: 15px">
+                Edit Recipe
+            </a>
 
             {{-- tags button modal --}}
             <div class="modal fade" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="tagModalLabel"
